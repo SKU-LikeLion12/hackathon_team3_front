@@ -14,6 +14,7 @@ export default function CommView() {
   const navigate = useNavigate();
   const [content, setContent] = useState(''); //댓글 달기
   const [comments, setComments] = useState([]); // 댓글 보기
+  const [currentUserId, setCurrentUserId] = useState(null); //현재 로그인한 유저 정보
 
   //끄적이기 로그인 여부 확인 계속 true 상태, 오류 잡아야 됨
   const [isLogined, setIsLogined] = useState(false);
@@ -42,8 +43,10 @@ useEffect(() => {
   if (memberToken) {
     try {
       const decodedmemberToken = jwtDecode(memberToken);
+      const decodedToken = jwtDecode(memberToken);
       setRole(decodedmemberToken.role);
       setIsLogined(true); // 로그인 상태 업데이트
+      setCurrentUserId(decodedToken.id); // 로그인한 사용자 ID 
     } catch (error) {
       console.error('토큰 해독 실패', error);
       setIsLogined(false);
@@ -100,6 +103,7 @@ useEffect(() => {
     const getComments = async () => {
       try {
         const response = await axios.get(`http://52.78.131.56:8080/generalpost/comment/${id}`);
+     
         setComments(response.data);
       } catch (err) {
         setError(err);
@@ -109,6 +113,7 @@ useEffect(() => {
     };
     getComments();
   }, [id]);
+
 
 
   if (loading) {
@@ -133,7 +138,7 @@ useEffect(() => {
       try {
         console.log(`내용 : ${content}`);
         // console.log(`내용 : ${proToken}`);
-        const res = await axios.post(`http://52.78.131.56:8080/expertpost/comment/${id}`, {
+        const res = await axios.post(`http://52.78.131.56:8080/generalpost/comment/${id}`, {
           token: localStorage.getItem('memberToken'),
           content
         });
@@ -161,6 +166,35 @@ useEffect(() => {
     }
   }
 
+  // 게시글 삭제
+ const commentDelete = async () => {
+  if (currentUserId !== post.writerId) { 
+    alert('삭제 권한이 없습니다.');
+  } else {
+  try {
+    await axios.delete(`http://52.78.131.56:8080/general/post/${id}`, {
+      headers: { Authorization: localStorage.getItem('memberToken') },
+      
+    //  token : localStorage.getItem('memberToken'),
+    });
+    console.log(decodedToken)
+    alert('게시글이 성공적으로 삭제되었습니다.');
+    window.location.reload();
+  } catch (error) {
+    console.error('댓글 삭제에 실패했습니다', error);
+    alert('게시글을 삭제하지 못했습니다.');
+  }
+}
+};
+
+// 게시글 수정
+const handleEdit = () => {
+  if (currentUserId === post.writerId) { 
+    navigate(`/comm_trans/${post.id}`); 
+  } else {
+    alert('수정 권한이 없습니다.');
+  }
+};
 
   
   // =======================================================================================
@@ -201,10 +235,10 @@ useEffect(() => {
             <img className={styles.view_img} alt='' src='../img/profile.jpg' />
             <p className={styles.view_p}>{post.writer}</p>
             <p className={styles.view_p2}>{post.createDate}</p>
-            <p className={styles.view_p3}>
-            <Link to={`/comm_trans/${post.id}`}>수정</Link>
+            <p className={styles.view_p3} onClick={handleEdit}>
+            수정
             </p>
-            <p className={styles.view_p3}>삭제</p>
+            <p className={styles.view_p3} onClick={commentDelete}>삭제</p>
           </div>
 
           {/* 내용 부분 */}
@@ -228,35 +262,44 @@ useEffect(() => {
         </div>
 
         {/* 댓글 보이는 부분 */}
-        {comments.map((comment) => (
-  <div key={comment.id} className={styles.view_show_comment}>
-    {comment.isFix ? (
-      <>
-        <img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAfCAYAAAAfrhY5AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAECSURBVHgB7ZW9DcIwEIXPQJF0TibIBjBC2IANYAQ2ASZgBUYIHR3eADaAdOnCs5QCRbbiM/kp8CdFJ/lOeedz/EIUCARGQHCKpZQrhI0lfXwDYrAgHnshxNaUqOtaIVyIwYx4FJ65QcUVd+Q+4kYw8pI84IpnpkV8B0saQXxnWcdFkDkxcb5qeHmGHT5seYy+wLGvicHctTCO47vuwZZHY1kURVRV1ZX6FE/T9IyQd9WhgRwNlGjgRg50nrl2NYx0R47YTMhY61KEBrSlfo9cQuSAqNDYqVWu77yiIUmS5IWHZadtfjGZsvHz8cUb4WnEwRMP28/7Ep925z5/skDgP/kAvWlK4ab/5gwAAAAASUVORK5CYII=' alt='' className={styles.view_show_icon} />
-        <div className={styles.view_nick2}>
-          <img className={styles.show_comment_img} alt='' src='../img/profile.jpg' />
-          <p className={styles.pronick_comment}>{comment.writer}</p>
-          <p className={styles.view_p2}>{comment.createDate}</p>
-        </div>
+        {comments.map((comment , index) => (
+        comment.role === 'EXPERT' ? (
+    <div key={comment.id} className={styles.view_show_comment}>
+       {/* 맨 위의 댓글에만 이미지를 보이게 */}
+    {index === 0 && comment.role === 'EXPERT' && (
+      <img
+        src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAfCAYAAAAfrhY5AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAECSURBVHgB7ZW9DcIwEIXPQJF0TibIBjBC2IANYAQ2ASZgBUYIHR3eADaAdOnCs5QCRbbiM/kp8CdFJ/lOeedz/EIUCARGQHCKpZQrhI0lfXwDYrAgHnshxNaUqOtaIVyIwYx4FJ65QcUVd+Q+4kYw8pI84IpnpkV8B0saQXxnWcdFkDkxcb5qeHmGHT5seYy+wLGvicHctTCO47vuwZZHY1kURVRV1ZX6FE/T9IyQd9WhgRwNlGjgRg50nrl2NYx0R47YTMhY61KEBrSlfo9cQuSAqNDYqVWu77yiIUmS5IWHZadtfjGZsvHz8cUb4WnEwRMP28/7Ep925z5/skDgP/kAvWlK4ab/5gwAAAAASUVORK5CYII='
+        alt='Expert Icon'
+        className={styles.view_show_icon}
+      />
+    )}
+      <div className={styles.view_nick2}>
+        
+        <img className={styles.show_comment_img} alt='' src='../img/profile.jpg' />
+        <p className={styles.pronick_comment}>{comment.writer}</p>
+        <p className={styles.view_p2}>{comment.createDate}</p>
+      </div>
         <div className={styles.view_comment}>
           {comment.content}
         </div>
-      </>
-    ) : (
+     
+    </div>
+  ) : (
+    <div key={comment.id} className={styles.view_show_comment}>
       <div className={styles.view_nick2}>
         <img className={styles.show_comment_img} alt="" src="../img/profile.jpg" />
         <p className={styles.view_p}>{comment.writer}</p>
         <p className={styles.view_p2}>{comment.createDate}</p>
       </div>
-    )}
-    <div className={styles.view_comment}>
-      {comment.content}
-    </div>
-  </div>
-))}
-          
-        </div>
+      <div className={styles.view_comment}>
+        {comment.content}
       </div>
-    
+    </div>
+  )
+))}
+
+</div>
+</div>
   );
 }
+

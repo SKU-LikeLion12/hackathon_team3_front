@@ -12,7 +12,8 @@ export default function CommView() {
   const [error, setError] = useState(null);
   const [role, setRole] = useState(null);
   const navigate = useNavigate();
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState(''); //댓글 달기
+  const [comments, setComments] = useState([]); // 댓글 보기
 
   //끄적이기 로그인 여부 확인 계속 true 상태, 오류 잡아야 됨
   const [isLogined, setIsLogined] = useState(false);
@@ -37,6 +38,7 @@ export default function CommView() {
 // 로그인 상태 확인
 useEffect(() => {
   const memberToken = localStorage.getItem('memberToken');
+  
   if (memberToken) {
     try {
       const decodedmemberToken = jwtDecode(memberToken);
@@ -93,6 +95,21 @@ useEffect(() => {
     getPost();
   }, [id]);
   
+  //댓글 보기
+  useEffect(() => {
+    const getComments = async () => {
+      try {
+        const response = await axios.get(`http://52.78.131.56:8080/generalpost/comment/${id}`);
+        setComments(response.data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getComments();
+  }, [id]);
+
 
   if (loading) {
     return <p>Loading...</p>;
@@ -107,7 +124,7 @@ useEffect(() => {
   }
 
   // =======================================================================================
-  const proToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3bmdsMTIzIiwiaWF0IjoxNzIxODI4MjA4LCJyb2xlIjoiRXhwZXJ0IiwiZXhwIjoxNzIxODMxODA4fQ.9IZnTQVTHd0OKxrDwyPUu72DAaTIEKXFK9hu7Md45JAr8ZR8yUKphDKXIxshvxOVa2-Ojrpvh05HUQWRN5bWrA';
+  
   // 댓글 달기
   const handleComent = async () => {
 
@@ -115,9 +132,9 @@ useEffect(() => {
       console.log('전문가 회원이다.');
       try {
         console.log(`내용 : ${content}`);
-        console.log(`내용 : ${proToken}`);
-        const res = await axios.post(`http://52.78.131.56:8080/general/comment/${id}`, {
-          token: localStorage.getItem('proToken'),
+        // console.log(`내용 : ${proToken}`);
+        const res = await axios.post(`http://52.78.131.56:8080/expertpost/comment/${id}`, {
+          token: localStorage.getItem('memberToken'),
           content
         });
         alert('댓글 등록!!');
@@ -130,8 +147,8 @@ useEffect(() => {
       console.log('일반 회원이다.');
       try {
         console.log(`댓글내용 : ${content}`);
-        console.log(`댓글 토큰 : ${proToken}`);
-        const res = await axios.post(`http://52.78.131.56:8080/general/comment/${id}`, {
+        // console.log(`댓글 토큰 : ${proToken}`);
+        const res = await axios.post(`http://52.78.131.56:8080/generalpost/comment/${id}`, {
           token: localStorage.getItem('memberToken'),
           content
         });
@@ -144,6 +161,8 @@ useEffect(() => {
     }
   }
 
+
+  
   // =======================================================================================
   return (
     <div className={styles.CommList_container}>
@@ -209,40 +228,35 @@ useEffect(() => {
         </div>
 
         {/* 댓글 보이는 부분 */}
-        <div className={styles.view_show_comment}>
-          <img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAfCAYAAAAfrhY5AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAECSURBVHgB7ZW9DcIwEIXPQJF0TibIBjBC2IANYAQ2ASZgBUYIHR3eADaAdOnCs5QCRbbiM/kp8CdFJ/lOeedz/EIUCARGQHCKpZQrhI0lfXwDYrAgHnshxNaUqOtaIVyIwYx4FJ65QcUVd+Q+4kYw8pI84IpnpkV8B0saQXxnWcdFkDkxcb5qeHmGHT5seYy+wLGvicHctTCO47vuwZZHY1kURVRV1ZX6FE/T9IyQd9WhgRwNlGjgRg50nrl2NYx0R47YTMhY61KEBrSlfo9cQuSAqNDYqVWu77yiIUmS5IWHZadtfjGZsvHz8cUb4WnEwRMP28/7Ep925z5/skDgP/kAvWlK4ab/5gwAAAAASUVORK5CYII=' alt='' className={styles.view_show_icon} />
-          <div className={styles.view_nick2}>
-            <img className={styles.show_comment_img} alt='' src='../img/profile.jpg' />
-            <p className={styles.pronick_comment}>여기에 닉네임 (전문의)</p>
-            <p className={styles.view_p2}>YYYY-MM-DD hh:ss</p>
-          </div>
-          <div className={styles.view_comment}>
-            20대 후반인데, 최근 감정기복이 너무 심해지고 제어를 못해서 고민입니다.<br />
-            가장 문제인 건, 이러한 문제가 사회생활을 할 때 생긴다는 것이에요..<br />
-            기분이 나빠도 최대한 참아보려해도 표정에서 감정이 다 드러납니다.<br />
-            조금이라도 나쁜 소리를 들으면 의기소침해져서 입이 삐죽 나오기도하고요...<br />
-            게다가 집에서는 기분 나쁘면 가족에게 참지않고 윽박을 지르며 화내는 등 어린아이처럼 대처합니다.<br />
-            만약 성인 사춘기가 있다면 도움 받을 방법이 있을까요?<br />
-            해결방안을 찾지 못해서 너무 고민이고 시간이 지날수록 아직 나이값도 하지 못한다는 자괴감이 듭니다.
-          </div>
-
-          <div className={styles.view_nick2}>
-            <img className={styles.show_comment_img} alt='' src='../img/profile.jpg' />
-            <p className={styles.view_p}>여기에 닉네임</p>
-            <p className={styles.view_p2}>YYYY-MM-DD hh:ss</p>
-          </div>
-
-          <div className={styles.view_comment}>
-            20대 후반인데, 최근 감정기복이 너무 심해지고 제어를 못해서 고민입니다.<br />
-            가장 문제인 건, 이러한 문제가 사회생활을 할 때 생긴다는 것이에요..<br />
-            기분이 나빠도 최대한 참아보려해도 표정에서 감정이 다 드러납니다.<br />
-            조금이라도 나쁜 소리를 들으면 의기소침해져서 입이 삐죽 나오기도하고요...<br />
-            게다가 집에서는 기분 나쁘면 가족에게 참지않고 윽박을 지르며 화내는 등 어린아이처럼 대처합니다.<br />
-            만약 성인 사춘기가 있다면 도움 받을 방법이 있을까요?<br />
-            해결방안을 찾지 못해서 너무 고민이고 시간이 지날수록 아직 나이값도 하지 못한다는 자괴감이 듭니다.
-          </div>
+        {comments.map((comment) => (
+  <div key={comment.id} className={styles.view_show_comment}>
+    {comment.isFix ? (
+      <>
+        <img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAfCAYAAAAfrhY5AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAECSURBVHgB7ZW9DcIwEIXPQJF0TibIBjBC2IANYAQ2ASZgBUYIHR3eADaAdOnCs5QCRbbiM/kp8CdFJ/lOeedz/EIUCARGQHCKpZQrhI0lfXwDYrAgHnshxNaUqOtaIVyIwYx4FJ65QcUVd+Q+4kYw8pI84IpnpkV8B0saQXxnWcdFkDkxcb5qeHmGHT5seYy+wLGvicHctTCO47vuwZZHY1kURVRV1ZX6FE/T9IyQd9WhgRwNlGjgRg50nrl2NYx0R47YTMhY61KEBrSlfo9cQuSAqNDYqVWu77yiIUmS5IWHZadtfjGZsvHz8cUb4WnEwRMP28/7Ep925z5/skDgP/kAvWlK4ab/5gwAAAAASUVORK5CYII=' alt='' className={styles.view_show_icon} />
+        <div className={styles.view_nick2}>
+          <img className={styles.show_comment_img} alt='' src='../img/profile.jpg' />
+          <p className={styles.pronick_comment}>{comment.writer}</p>
+          <p className={styles.view_p2}>{comment.createDate}</p>
+        </div>
+        <div className={styles.view_comment}>
+          {comment.content}
+        </div>
+      </>
+    ) : (
+      <div className={styles.view_nick2}>
+        <img className={styles.show_comment_img} alt="" src="../img/profile.jpg" />
+        <p className={styles.view_p}>{comment.writer}</p>
+        <p className={styles.view_p2}>{comment.createDate}</p>
+      </div>
+    )}
+    <div className={styles.view_comment}>
+      {comment.content}
+    </div>
+  </div>
+))}
+          
         </div>
       </div>
-    </div>
+    
   );
 }

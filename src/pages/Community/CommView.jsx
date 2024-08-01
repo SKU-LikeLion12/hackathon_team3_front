@@ -167,25 +167,27 @@ useEffect(() => {
   }
 
   // 게시글 삭제
- const commentDelete = async () => {
-  if (currentUserId !== post.writerId) { 
-    alert('삭제 권한이 없습니다.');
-  } else {
-  try {
-    await axios.delete(`http://52.78.131.56:8080/general/post/${id}`, {
-      headers: { Authorization: localStorage.getItem('memberToken') },
-      
-    //  token : localStorage.getItem('memberToken'),
-    });
-    console.log(decodedToken)
-    alert('게시글이 성공적으로 삭제되었습니다.');
-    window.location.reload();
-  } catch (error) {
-    console.error('댓글 삭제에 실패했습니다', error);
-    alert('게시글을 삭제하지 못했습니다.');
-  }
-}
-};
+  const commentDelete = async () => {
+    if (currentUserId !== post.writerId) { 
+      alert('삭제 권한이 없습니다.');
+    } else {
+      try {
+        // 콘솔에 토큰 정보 출력
+        console.log('토큰:', localStorage.getItem('memberToken'));
+  
+        await axios.delete(`http://52.78.131.56:8080/general/post/${id}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('memberToken')}` },
+        });
+  
+        alert('게시글이 성공적으로 삭제되었습니다.');
+        window.location.href='/comm_list';
+      } catch (error) {
+        console.error('게시글 삭제에 실패했습니다', error);
+        alert('게시글을 삭제하지 못했습니다.');
+      }
+    }
+  };
+  
 
 // 게시글 수정
 const handleEdit = () => {

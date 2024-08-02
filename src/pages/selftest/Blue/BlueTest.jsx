@@ -1,7 +1,39 @@
-import React from 'react'
+import React,{useEffect , useState} from 'react';
 import styles from './Blue.module.css';
+import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 
-export default function BlueTest ({ sum }) {
+export default function BlueTest ({ sum , onClick }) {
+
+    const [isLogined, setIsLogined] = useState(false);
+    const [role, setRole] = useState(null);
+    const [post ,setPost] = useState(null); //유저 닉
+
+    const Navigate = useNavigate();
+    const goToMap=()=>{
+        Navigate('/hospital_map')
+    }
+
+    //로그인 유지 부분
+    useEffect(() => {
+        const memberToken = localStorage.getItem('memberToken');
+        if (memberToken) {
+          try {
+            const decodedmemberToken = jwtDecode(memberToken);
+            console.log('Decoded Member Token:', decodedmemberToken);
+            setRole(decodedmemberToken.role);
+            setPost(decodedmemberToken.sub)
+            setIsLogined(true);
+          } catch (error) {
+            console.error('토큰 해독 실패', error);
+            setIsLogined(false);
+          }
+        } else {
+          setIsLogined(false);
+        }
+      }, []);
+    
+// ===============================================================================
     
     const lv1 = sum < 5
     const lv2 = sum <=10 && sum > 5
@@ -10,11 +42,11 @@ export default function BlueTest ({ sum }) {
     const lv5 = sum > 21
    
     return (
-        <div>
+        <div onClick={goToMap}>
             {lv1 && (
                 <div className={styles.resultBox}>
                     <div className={styles.resultText}>
-                        <p>'유저'님의 검사 결과</p>
+                        <p>'{post}'님의 검사 결과</p>
                     </div>
                     <div>
                         <div className={styles.resultScoreLine1}>
@@ -27,7 +59,7 @@ export default function BlueTest ({ sum }) {
                     </div>
                     <div className={styles.resultIntro}>
                         <p>
-                            현재 '유저'님은 <span className={styles.resultHighlight}>{sum}</span>으로 
+                            현재 <span className={styles.resultHighlight}>'{post}'</span>님은 <span className={styles.resultHighlight}>{sum}점</span>으로 
                             일상에서 겪을 수 있는 감정입니다.  
                             <img src={process.env.PUBLIC_URL + "/imges/cloud.png"} alt="" /> <br />
                             기분이 나아질 수 있도록 활동을 통해 일상의 특별함을 만들고, <br />
@@ -46,7 +78,7 @@ export default function BlueTest ({ sum }) {
                 <div className={styles.resultBox}>
                     {/* lv2에 대한 내용 */}
                     <div className={styles.resultText}>
-                        <p>'유저'님의 검사 결과</p>
+                        <p>'{post}'님의 검사 결과</p>
                     </div>
                     <div>
                         <div className={styles.resultScoreLine2}>
@@ -59,7 +91,7 @@ export default function BlueTest ({ sum }) {
                     </div>
                     <div className={styles.resultIntro}>
                         <p>
-                            현재 '유저'님은 <span className={styles.resultHighlight}>{sum}</span>으로 
+                            현재 <span className={styles.resultHighlight}>'{post}'</span>님은 <span className={styles.resultHighlight}>{sum}점</span>으로 
                             일상에서 겪을 수 있는 감정입니다.  
                             <img src={process.env.PUBLIC_URL + "/imges/cloud.png"} alt="" /> <br />
                             기분이 나아질 수 있도록 활동을 통해 일상의 특별함을 만들고, <br />
@@ -78,7 +110,7 @@ export default function BlueTest ({ sum }) {
                 <div className={styles.resultBox}>
                     {/* lv3에 대한 내용 */}
                     <div className={styles.resultText}>
-                        <p>'유저'님의 검사 결과</p>
+                        <p>'{post.nickname}'님의 검사 결과</p>
                     </div>
                     <div>
                         <div className={styles.resultScoreLine3}>
@@ -91,7 +123,7 @@ export default function BlueTest ({ sum }) {
                     </div>
                     <div className={styles.resultIntro}>
                         <p>
-                            현재 '유저'님은 <span className={styles.resultHighlight}>{sum}</span>으로 
+                            <span className={styles.resultHighlight}>'{post}'</span>님은 <span className={styles.resultHighlight}>{sum}점</span>으로 
                             일상에서 겪을 수 있는 감정입니다.  
                             <img src={process.env.PUBLIC_URL + "/imges/cloud.png"} alt="" /> <br />
                             기분이 나아질 수 있도록 활동을 통해 일상의 특별함을 만들고, <br />
@@ -110,7 +142,7 @@ export default function BlueTest ({ sum }) {
                 <div className={styles.resultBox}>
                     {/* lv4에 대한 내용 */}
                     <div className={styles.resultText}>
-                        <p>'유저'님의 검사 결과</p>
+                        <p>'{post.nickname}'님의 검사 결과</p>
                     </div>
                     <div>
                         <div className={styles.resultScoreLine4}>
@@ -123,7 +155,7 @@ export default function BlueTest ({ sum }) {
                     </div>
                     <div className={styles.resultIntro}>
                         <p>
-                            현재 '유저'님은 <span className={styles.resultHighlight}>{sum}</span>으로 
+                            현재 <span className={styles.resultHighlight}>'{post}'</span>님은 <span className={styles.resultHighlight}>{sum}점</span>으로 
                             살짝 기분이 다운되어있습니다.  
                             <img src={process.env.PUBLIC_URL + "/imges/cloud.png"} alt="" /> <br />
                             현재 심각하게 우울한 상태는 아니지만, 이러한 기분이 지속되거나 <br />
@@ -142,7 +174,7 @@ export default function BlueTest ({ sum }) {
                 <div className={styles.resultBox}>
                     {/* lv5에 대한 내용 */}
                     <div className={styles.resultText}>
-                        <p>'유저'님의 검사 결과</p>
+                        <p>'{post.nickname}'님의 검사 결과</p>
                     </div>
                     <div>
                         <div className={styles.resultScoreLine5}>
@@ -155,7 +187,7 @@ export default function BlueTest ({ sum }) {
                     </div>
                     <div className={styles.resultIntro}>
                         <p>
-                            현재 '유저'님은 <span className={styles.resultHighlight}>{sum}</span>으로 
+                            현재 <span className={styles.resultHighlight}>'{post}'</span>님은 <span className={styles.resultHighlight}>{sum}점</span>으로 
                             <span className={styles.resultHighlight}>'우울증'</span>이 의심되는 단계입니다. 
                             <img src={process.env.PUBLIC_URL + "/imges/cloud.png"} alt="" /> <br />
                             <span>'우울증'</span>은 마음의 감기라고도 불립니다. <br />

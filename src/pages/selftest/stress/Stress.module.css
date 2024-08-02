@@ -343,6 +343,14 @@
     margin-top: 70px;
 }
 
+.resultScoreLine1 img,.resultScoreLine2 img,.resultScoreLine3 img,.resultScoreLine4 img,.resultScoreLine5 img{
+    float: right;
+    position: relative;
+    top: -20px;
+    left: 5px;
+    width: 30px;
+}
+
 .scoreText{
     font-size: 20px;
     font-weight: bold;
@@ -477,3 +485,18 @@
     font-weight: bold;
 }
 
+.testContainer{
+    display: flex;
+    flex-direction: column;
+    margin: 0 70% 0 30%;
+    justify-content: center;
+    align-items: center;
+}
+
+.resultContainer{
+    display: flex;
+    flex-direction: column;
+    margin-right: 10% ;
+    justify-content: center;
+    align-items: center;
+}

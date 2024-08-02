@@ -1,11 +1,36 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import { Container } from 'react-bootstrap'
 import styles from './Stress.module.css'
 import { useNavigate , useLocation} from 'react-router-dom';
 import StressTemp from './StressTemp'
-
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 const StressResult = () => {
+
+    const [isLogined, setIsLogined] = useState(false);
+    const [role, setRole] = useState(null);
+    const category = 'stress'
+
+    //로그인 유지 부분
+    useEffect(() => {
+        const memberToken = localStorage.getItem('memberToken');
+        if (memberToken) {
+          try {
+            const decodedmemberToken = jwtDecode(memberToken);
+            setRole(decodedmemberToken.role);
+            setIsLogined(true);
+          } catch (error) {
+            console.error('토큰 해독 실패', error);
+            setIsLogined(false);
+          }
+        } else {
+          setIsLogined(false);
+        }
+      }, []);
+    
+// ===============================================================================
+
     // 네비게이트 함수
     const Navigate = useNavigate();
 
@@ -25,6 +50,10 @@ const StressResult = () => {
         Navigate('/anxiety')
     }
 
+    const goToMap=()=>{
+        Navigate('/hospital_map')
+    }
+
      //url에 나타내기 위함
      const location = useLocation();
      const queryParams = new URLSearchParams(location.search);
@@ -40,7 +69,25 @@ const StressResult = () => {
  
      console.log(`총 결과값: ${sum}`);
 
-     
+     // ===========================================================================
+
+    //결과 저장하기
+    const saveTest = async() => {
+        try {
+            await axios.post('http://52.78.131.56:8080/test/result', {
+              token: localStorage.getItem('memberToken'),
+              category,
+              sum
+            });
+            alert('저장 완료');
+            // window.location.href = '/profile';  
+          } catch (error) {
+            console.error('실패했습니다', error);
+            alert('결과를 저장하지 못했습니다');
+          }
+    }
+
+
   return (
 
     <Container>
@@ -61,34 +108,12 @@ const StressResult = () => {
         </div>
 
       {/* 결과 박스 */}
-      <StressTemp sum={ sum } />
+      <div className={styles.resultContainer}>
+      <StressTemp sum={ sum } onClick={goToMap}/>
+        </div>
+        
 
-        {/* <div className={styles.resultBox}>
-            <div className={styles.resultText}>
-                <p>'유저'님의 검사 결과</p>
-            </div>
-            <div>
-                <div className={styles.resultScoreLine}> <img img src={process.env.PUBLIC_URL + "/imges/pol.png"} alt=""/></div> <br/>
-                <p className={styles.scoreText}><span>0</span> <span>5</span> <span>10</span> <span>15</span> <span>20</span>
-                </p>
-            </div>
-            <div className={styles.resultIntro}>
-                <p>현재 '유저'님은 <span className={styles.resultHighlight}>{sum}</span>으로 <span className={styles.resultHighlight}>'우울증'</span>이 의심되는 단계입니다. <img src={process.env.PUBLIC_URL + "/imges/cloud.png"} alt="" /> <br/>
-                   <span>'우울증'</span>은 마음의 감기라고도 불립니다. <br/>
-                   <span>주변 의료기관을 방문해 보시는 것을 추천드립니다.</span>
-                </p>
-            </div>
-
-            <div className={styles.resultLink}>
-                <p>주변 정신과 의료기관 찾기</p>
-                <div className={styles.plusline}></div>
-                <div className={styles.resultArrow2}></div>
-            </div>
-        </div> */}
-
-        {/* 추천 영상 */}
-
-        <div className={styles.recommendBox}>
+        {/* <div className={styles.recommendBox}>
             <p>'유저'님을 위한 추천영상</p>
             <div className={styles.recomendVideo}>
                 <div className={styles.recomendVideoBox}></div> <br />
@@ -112,10 +137,10 @@ const StressResult = () => {
                     <span>명상하기</span>
                 </div>
             </div>
-        </div>
+        </div> */}
 
         <div className={styles.resultButtonBox}>
-            <button className={styles.resultButton1}>결과 저장하기</button>
+            <button className={styles.resultButton1} onClick={saveTest}>결과 저장하기</button>
             <button className={styles.resultButton2} onClick={goToBlue}>다시 검사하기</button>
         </div>
     </Container>

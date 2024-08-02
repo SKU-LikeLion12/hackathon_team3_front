@@ -60,7 +60,7 @@ function App() {
   const showNavbar = authPages.includes(location.pathname);
 
   return (
-    <div className='App'>
+    <div className='App' pretendard-font>
 
        {showNavbar ? <Navbar /> : <LoginNavbar />}
       <CategoryProvider>

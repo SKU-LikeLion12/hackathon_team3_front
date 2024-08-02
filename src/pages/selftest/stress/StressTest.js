@@ -40,7 +40,7 @@ const StressTest = () => {
     const 결과보기 = () => {
         const queryParams = new URLSearchParams();
         queryParams.set('buttonStates', JSON.stringify(buttonStates));
-        navigate(`/blueResult?${queryParams.toString()}`);
+        navigate(`/stressResult?${queryParams.toString()}`);
     };
     
     const 이전페이지 = () => {
@@ -160,7 +160,7 @@ const StressTest = () => {
             <p>(전혀 아니다 : 0점, 조금 느꼈다 : 1점, 상당히 느꼈다: 2점, 심하게 느꼈다: 3점)</p>
         </div>
 
-        <div>
+        <div className={styles.testContainer}>
                 {currentTestData.map((data, index) => (
                     <TestPart
                         key={index}
@@ -171,7 +171,7 @@ const StressTest = () => {
                         isLast={index === currentTestData.length - 1 && isLastPage}
                     />
                 ))}
-            </div>
+            
             {firstPage && (
                     <button className={styles.nextPage} onClick={다음페이지} style={{ marginLeft: '52vh' }}>
                         <p>다음 페이지</p> <span className={styles.nextPageline}></span> <span className={styles.nextPageArrow}></span>
@@ -198,7 +198,7 @@ const StressTest = () => {
                 </button>
             </div>
             )}
-               
+            </div>
         </Container>
     );
 }

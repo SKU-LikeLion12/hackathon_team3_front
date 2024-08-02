@@ -45,10 +45,10 @@ useEffect(() => {
   
   if (memberToken) {
     try {
-      const decodedmemberToken = jwtDecode(memberToken);
       const decodedToken = jwtDecode(memberToken);
-      setRole(decodedmemberToken.role);
-      setIsLogined(true); // 로그인 상태 업데이트
+      // console.log('디코딩된 토큰:', decodedToken);
+      setRole(decodedToken.role);
+      setIsLogined(true);
     } catch (error) {
       console.error('토큰 해독 실패', error);
       setIsLogined(false);
@@ -58,16 +58,6 @@ useEffect(() => {
   }
 }, []);
 
-//수정과 삭제 권한을 위함
-const 작성자토큰 = (token) => {
-  try {
-    const decodedToken = jwtDecode(token);
-    return decodedToken.id; 
-  } catch (error) {
-    console.error('토큰 디코딩 실패:', error);
-    return null;
-  }
-};
 
 // ===========================================================================
 
@@ -79,6 +69,7 @@ const 작성자토큰 = (token) => {
         // headers: { Authorization: `Bearer ${memberToken}` },
       });
       const postData = response.data;
+      console.log(postData)
       setPost(postData)
     } catch (error) {
       console.error('게시글을 불러오는 데 실패했습니다', error);
@@ -106,8 +97,8 @@ const 작성자토큰 = (token) => {
     getComments();
   }, [id]);
 
-   //글 저장 여부 확인
-   useEffect(() => {
+  // 글 저장 여부 확인
+  useEffect(() => {
     const savedState = localStorage.getItem(`savedPost_${id}`);
     setSave(savedState === 'true'); 
   }, [id]);
@@ -164,45 +155,37 @@ const 작성자토큰 = (token) => {
 // =========================================================================
 
 // 게시글 수정
-const handleEdit = async () => {
-  const token = localStorage.getItem('memberToken'); //이게 현재 로그인한 토큰
-  const tokenWriterId = 작성자토큰(token); //이게 게시글 토큰
-
-  if (tokenWriterId && tokenWriterId === post.writerId) {
+const handleEdit = () => {
+  //이상하게 본인 아이디인데 false로 되어 있음 
+  if (post.change===false) {
+    console.log(post.change)
     navigate(`/pro_comm_trans/${post.id}`);
   } else {
     alert('수정 권한이 없습니다.');
   }
 };
 
+// 게시글 삭제
+const postDelete = async () => {
+  console.log('현재 로그인한 토큰:', localStorage.getItem('memberToken'));
+  console.log('작성자 이름:', post.writer);
 
-
-
-  // 게시글 삭제
-  const postDelete = async () => {
-    
-    const token = localStorage.getItem('memberToken'); //이게 현재 로그인한 토큰
-    const tokenWriterId = 작성자토큰(token); //이게 게시글 토큰
-
-    if (tokenWriterId && tokenWriterId === post.writerId) {
-      try {
-        console.log('토큰:', localStorage.getItem('memberToken'));
-  
-        await axios.delete(`http://52.78.131.56:8080/expert/post/${id}`, {
-          // headers: { Authorization: `Bearer ${localStorage.getItem('memberToken')}` },
-        });
-  
-        alert('게시글이 성공적으로 삭제되었습니다.');
-        window.location.href='/pro_comm_list';
-      } catch (error) {
-        console.error('게시글 삭제에 실패했습니다', error);
-        alert('게시글을 삭제하지 못했습니다.');
-      }
-      
-    } else {
-      alert('삭제 권한이 없습니다.');
+  if (post.change===false) {
+    try {
+      await axios.delete(`http://52.78.131.56:8080/expert/post/${post.id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('memberToken')}` },
+      });
+      alert('게시글이 성공적으로 삭제되었습니다.');
+      window.location.href = '/pro_comm_list';
+    } catch (error) {
+      console.error('게시글 삭제에 실패했습니다', error);
+      alert('게시글을 삭제하지 못했습니다.');
     }
-  };
+  } else {
+    alert('삭제 권한이 없습니다.');
+  }
+};
+
 
   //=============================================================================
  

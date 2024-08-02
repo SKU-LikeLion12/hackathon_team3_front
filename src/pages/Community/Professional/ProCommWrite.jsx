@@ -18,7 +18,7 @@ export default function ProCommWrite() {
   const [role, setRole] = useState(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const proToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3bmdsMTIzIiwiaWF0IjoxNzIxODI4MjA4LCJyb2xlIjoiRXhwZXJ0IiwiZXhwIjoxNzIxODMxODA4fQ.9IZnTQVTHd0OKxrDwyPUu72DAaTIEKXFK9hu7Md45JAr8ZR8yUKphDKXIxshvxOVa2-Ojrpvh05HUQWRN5bWrA';
+  
  //로그인 토큰 가져오기
  useEffect(() => {
   const memberToken = localStorage.getItem('memberToken');
@@ -26,11 +26,33 @@ export default function ProCommWrite() {
     try {
       const decodedmemberToken = jwtDecode(memberToken);
       setRole(decodedmemberToken.role);
+      setIsLogined(true);
     } catch (error) {
       console.error('토큰 해독 실패', error);
+      setIsLogined(false);
     }
+  } else {
+    setIsLogined(false);
   }
 }, []);
+
+// 끄적이기 로그인 여부 확인
+const [isLogined, setIsLogined] = useState(false);
+useEffect(() => {
+  const loggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+  setIsLogined(loggedIn);
+}, []);
+
+// 로그인 여부 확인 후 링크 이동
+const handleLoginClick = () => {
+  if (!isLogined) {
+    sessionStorage.setItem('redirectPath', '/pro_comm_write');
+    navigate('/login');
+  } else {
+    navigate('/pro_comm_write');
+  }
+};
+
 //=============================================================
 
   const handleTitleChange = (e) => {
@@ -41,25 +63,27 @@ export default function ProCommWrite() {
     setContent(e.target.value);
   };
 
+  //작성한 부분
   const handleSubmit = async () => {
     if (role !== 'Expert') {
-      console.error('전문가 회원이 아닙니다');
-      alert('전문가 회원이 아닙니다. 고민 끄적끄적을 이용해주세요');
-      return;
+        console.error('전문가 회원이 아닙니다');
+        alert('전문가 회원이 아닙니다. 고민 끄적끄적을 이용해주세요');
+        return;
     }
-    try {
-      const response = await axios.post('http://52.78.131.56:8080/expert/post', {
-        title,
-        content,
-        token: proToken,
-      });
-      alert('글이 성공적으로 등록되었습니다.');
-      navigate('/pro_comm_list');  // 성공 후 목록 페이지로 이동
+    try {   
+        await axios.post('http://52.78.131.56:8080/expert/post', {
+            title,
+            content,
+            token: localStorage.getItem('memberToken'),
+        });
+
+        alert('글이 성공적으로 등록되었습니다.');
+        window.location.href='/pro_comm_list'; 
     } catch (error) {
-      console.error('데이터를 전송하는데 실패했습니다', error);
-      alert('데이터를 전송하지 못했습니다.');
+        console.error('데이터를 전송하는데 실패했습니다', error);
+        alert('데이터를 전송하지 못했습니다.');
     }
-  };
+};
   
 
   return (

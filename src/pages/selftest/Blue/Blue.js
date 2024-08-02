@@ -169,7 +169,7 @@ export default function Blue() {
                 <p>(1일 이하 : 0점, 1~2일 : 1점, 3~4일: 2점, 5일 이상: 3점)</p>
             </div>
 
-            <div>
+            <div className={styles.testContainer}>
                 {currentTestData.map((data, index) => (
                     <TestPart
                         key={index}
@@ -180,7 +180,7 @@ export default function Blue() {
                         isLast={index === currentTestData.length - 1 && isLastPage}
                     />
                 ))}
-            </div>
+            
             {firstPage && (
                     <button className={styles.nextPage} onClick={다음페이지} style={{ marginLeft: '52vh' }}>
                         <p>다음 페이지</p> <span className={styles.nextPageline}></span> <span className={styles.nextPageArrow}></span>
@@ -207,6 +207,7 @@ export default function Blue() {
                 </button>
             </div>
             )}
+            </div>
                
         </Container>
     );

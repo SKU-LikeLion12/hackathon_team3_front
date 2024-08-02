@@ -5,6 +5,7 @@ import { useLocation , useNavigate } from 'react-router-dom';
 import AnxietyTest from './AnxietyTest'
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import AnxietyRecom from './AnxietyRecom';
 
 
 const AnxietyResult = () => {
@@ -109,34 +110,11 @@ const AnxietyResult = () => {
         {/* 결과 박스 */}
         <div className={styles.resultContainer}>
         <AnxietyTest sum={sum} onClick={goToMap}/>
+        <AnxietyRecom sum={sum} />
         </div>
         {/* 추천 영상 */}
 
-        {/* <div className={styles.recommendBox}>
-            <p>'유저'님을 위한 추천영상</p>
-            <div className={styles.recomendVideo}>
-                <div className={styles.recomendVideoBox}></div> <br />
-                <div className={styles.recomendVideoBox}></div>
-            </div>
-        </div>
-
-        <div className={styles.recommendBox}>
-            <p>유저님을 위한 추천활동</p>
-            <div className={styles.recommendActive}>
-                <div>
-                    <img src={process.env.PUBLIC_URL + "/imges/cicle.png"} alt="" /> <br/>
-                    <span>자전거 타기</span>
-                </div>
-                <div>
-                    <img src={process.env.PUBLIC_URL + "/imges/books.png"} alt="" style={{width: 110}}/><br />
-                    <span>독서하기</span>
-                </div>
-                <div>
-                    <img src={process.env.PUBLIC_URL + "/imges/yoga.png"} alt="" /><br/>
-                    <span>명상하기</span>
-                </div>
-            </div>
-        </div> */}
+        
 
         <div className={styles.resultButtonBox}>
             <button className={styles.resultButton1} onClick={saveTest}>결과 저장하기</button>

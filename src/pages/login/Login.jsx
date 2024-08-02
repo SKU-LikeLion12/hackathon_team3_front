@@ -84,7 +84,7 @@ export default function Login() {
 
           sessionStorage.setItem('isLoggedIn', 'true');
 
-          const redirectPath = sessionStorage.getItem('redirectPath') || '/';
+          const redirectPath = sessionStorage.getItem('redirectPath') || '/main';
           sessionStorage.removeItem('redirectPath');
           navigate(redirectPath);
         } else {

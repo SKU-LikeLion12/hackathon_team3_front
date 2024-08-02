@@ -36,9 +36,7 @@ const Manager = () => {
   const fetchExpertCheck = async () => {
     try {
       const response = await axios.get('http://52.78.131.56:8080/admin/expertCheck', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('memberToken')}`  // 실제 토큰 사용
-        }
+        
       });
       setExpertCheck(response.data);
     } catch (error) {
@@ -50,25 +48,45 @@ const Manager = () => {
   };
 
   //수락 버튼
-  const handleExpertAccept = async (id) => {
+  const handleExpertAccept = async id => {
     const url = `http://52.78.131.56:8080/admin/changeIsExpert/${id}`;
-    console.log(`Sending request to: ${url} with isExpert: true`);
+    console.log(`Sending request to: ${url} with value: true`);
 
     try {
-      const response = await axios.post(url, { isExpert: true }, {
+      // 서버에 true 값을 전송
+      const response = await axios.post(url, true, {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('memberToken')}`  // 실제 토큰 사용
-        }
+          Authorization: `Bearer ${localStorage.getItem('memberToken')}`, // 실제 토큰 사용
+        },
       });
       console.log('Response:', response.data);
       alert('승인되었습니다');
-      setCompleted((prev) => ({ ...prev, [id]: true }));
-      setExpertCheck((prev) =>
-        prev.map((item) =>
-          item.id === id ? { ...item, isExpert: true } : item
-        )
-      );
+      setCompleted(prev => ({ ...prev, [id]: true }));
+      setExpertCheck(prev => prev.map(item => (item.id === id ? { ...item, isExpert: true } : item)));
+    } catch (error) {
+      console.error('데이터를 불러오는데 실패했습니다', error);
+      alert('데이터를 불러오지 못했습니다.');
+    }
+  };
+
+
+  //거절 버튼
+  const handleExpertReject = async (id) => {
+    const url = `http://52.78.131.56:8080/admin/changeIsExpert/${id}`;
+
+    try {
+      // 서버에 false 값을 전송
+      const response = await axios.post(url, false, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('memberToken')}`, // 실제 토큰 사용
+        },
+      });
+      console.log('Response:', response.data);
+      alert('거절 되었습니다');
+      setCompleted(prev => ({ ...prev, [id]: true }));
+      setExpertCheck(prev => prev.map(item => (item.id === id ? { ...item, isExpert: true } : item)));
     } catch (error) {
       console.error('데이터를 불러오는데 실패했습니다', error);
       alert('데이터를 불러오지 못했습니다.');
@@ -113,12 +131,19 @@ const Manager = () => {
               <div className={styles.item}>{item.createDate}</div>
               <div className={styles.item}>{item.updateDate}</div>
               <div className={styles.item}>{item.isExpert ? 'Yes' : 'No'}</div>
+              
               <button
-                className={`${styles.item} ${item.isExpert ? styles.acceptbut : styles.rejectbut}`}
+                className={`${styles.acceptbut} ${completed[item.id] ? styles.complite : ''}`}
                 onClick={() => handleExpertAccept(item.id)}
                 disabled={completed[item.id]}
               >
                 {completed[item.id] ? '완료' : '수락'}
+              </button>
+              <button
+                className={styles.rejectbut}
+                onClick={() => handleExpertReject(item.id)}
+              >
+                거절
               </button>
             </div>
           ))}

@@ -22,7 +22,7 @@ const LoginNav = () => {
     Navigate("/profile/:userId")
   }
   const goToCommu=()=>{
-    Navigate("pro_comm_list")
+    Navigate("comm_list")
   }
 
   const map=()=>{

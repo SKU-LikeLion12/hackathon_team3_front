@@ -17,7 +17,7 @@ export default function ProCommView() {
   const [error, setError] = useState(null);
   const [content, setContent] = useState(''); //댓글 달기
   const [comments, setComments] = useState([]); // 댓글 보기
-
+  const [save ,setSave] = useState(false); //게시글 저장
 
   //끄적이기 로그인 여부 확인 계속 true 상태, 오류 잡아야 됨
   const [isLogined, setIsLogined] = useState(false);
@@ -106,6 +106,13 @@ const 작성자토큰 = (token) => {
     getComments();
   }, [id]);
 
+   //글 저장 여부 확인
+   useEffect(() => {
+    const savedState = localStorage.getItem(`savedPost_${id}`);
+    setSave(savedState === 'true'); 
+  }, [id]);
+
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -117,7 +124,6 @@ const 작성자토큰 = (token) => {
   if (!post) {
     return <p>게시글을 찾을 수 없다</p>;
   }
-
 
   // 댓글 달기
   const handleComent = async () => {
@@ -201,38 +207,43 @@ const handleEdit = async () => {
   //=============================================================================
  
   
-  // // 댓글 수정
-  // const handleCommentEdit = async (commentId, newContent) => {
-  //   try {
-  //     console.log('토큰:', memberToken);
-  //     await axios.put(`http://52.78.131.56:8080/comment/${commentId}`, {
-  //       content: newContent,
-  //     }, {
-  //       headers: { Authorization: `Bearer ${memberToken}` },
-  //     });
-  //     alert('댓글이 성공적으로 수정되었습니다.');
-  //     fetchComments(); // 수정 후 댓글 목록 새로고침
-  //   } catch (error) {
-  //     console.error('댓글 수정에 실패했습니다', error);
-  //     alert('댓글을 수정하지 못했습니다.');
-  //   }
-  // };
 
-  // // 댓글 삭제
-  // const handleCommentDelete = async (commentId) => {
-  //   try {
-  //     console.log('토큰:', memberToken);
-  //     await axios.delete(`http://52.78.131.56:8080/comment/${commentId}`, {
-  //       headers: { Authorization: `Bearer ${memberToken}` },
-  //     });
-  //     alert('댓글이 성공적으로 삭제되었습니다.');
-  //     fetchComments(); // 삭제 후 댓글 목록 새로고침
-  //   } catch (error) {
-  //     console.error('댓글 삭제에 실패했습니다', error);
-  //     alert('댓글을 삭제하지 못했습니다.');
-  //   }
-  // };
+//게시글 저장
+const clickSave = async () => {
+  setSave(prevSave => {
+    const newSaveState = !prevSave;
+    // 로컬 스토리지에 저장 상태 업데이트
+    localStorage.setItem(`savedPost_${id}`, newSaveState);
+    return newSaveState;
+  });
 
+  try {
+    await axios.post(`http://52.78.131.56:8080/post/save/${id}`, {
+      token: localStorage.getItem('memberToken'),
+    });
+    alert('게시글 저장 완료!!');
+  } catch (e) {
+    console.error('게시글을 저장하지 못했습니다.', e);
+    alert('게시글을 저장하지 못했습니다.');
+  }
+};
+
+
+//끄덕임 (좋아요)
+const clickLike = async() => {
+  try {
+    await axios.post(`http://52.78.131.56:8080/post/like/${id}`, {
+      token: localStorage.getItem('memberToken'),
+    });
+    alert('끄덕 끄덕');
+    window.location.reload();
+  } catch (e) {
+    console.error('실패', e);
+    alert('끄덕 끄덕 실패😢😢');
+  }
+}
+
+ // ====================================================================
 
   return (
     <div className={styles.CommList_container}>
@@ -261,8 +272,22 @@ const handleEdit = async () => {
           {/* 제목과 북마크 */}
           <div className={styles.view_title}>
             <h4 className={styles.view_h4}>{post.title}</h4>
-            <img className={styles.main_icon} src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADsSURBVHgB7ZThDYIwEIWvxgEcATfACaQbMIIbiBPgBuIIjuAEtRO4AiOwAb4zNFED7WFq5AcvufRIufeR3hWiWf+WGtowxiRKqTvSFQXUtu1Ba1317S08dUeJOQsfsh/a8wGiSApocAxnhEVec86rpFAEgOEGZ1wgMpfzyuAYgBqGtXtA3rgVkGuoWAJIeKL6NtDcLUUAsBEY5m2irLUnhodqpU1OXiEwL3E8haRwSXKlDIH5TWo+FvCEwDwdUzCZi/Z7AM88QiPWiAsJb3KoB033W6jcBeu06yYqR+NL+kYwyD5n3/NuTrMmqwf5GGsmO2z7xQAAAABJRU5ErkJggg==' alt='' />
-          </div>
+            { save ?
+            <img
+            className={styles.main_icon}
+            onClick={clickSave}
+            src={save
+              ? 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAF2SURBVHgB7ZjhTYRAEIUfxAK0A64CYwdnBeYqEDvACuQqsAXs4DrwqOCiDUgJZwGCb3ETARUXZoj+mC/ZQJYhfIHM7LCAYRjGvySaEtw84ZqHnCOBjAo1bqML7EJvCBZtDpSL8QJNalxSdh8SGiOcFPqsQwOniP4pJqqNhmjJpNi4xOC4gcton9V+buPnRJxARhmd9xOC1WHvjszmqjO9a57xiCY8eYbIROu2pvYYCH7yhi2/3xozkX76aqHYL0hFkwmxpxAgE41xNSE6gwDpG838+j8KEyzjk36NG0OjPBVjsu21GPcQolXwv5X1cwUU0FyZerKakg5pwR/iZBPW11eeiz93F21RR75EB2HdkzYmqs0SoiUU+s8hmqJl+1fJ/pRj1TbNwAOUkIoeObaUOmsFO7++7pxzKa+t8CFcQcDcOurents8KCh0HAv0jXTqztmcpHw1d5ixgTFV1AnmoZsGQ3hfAbd6Hdjpx4vsExiGYRg/8A6rfmDhxxpioAAAAABJRU5ErkJggg=='
+              : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADsSURBVHgB7ZThDYIwEIWvxgEcATfACaQbMIIbiBPgBuIIjuAEtRO4AiOwAb4zNFED7WFq5AcvufRIufeR3hWiWf+WGtowxiRKqTvSFQXUtu1Ba1317S08dUeJOQsfsh/a8wGiSApocAxnhEVec86rpFAEgOEGZ1wgMpfzyuAYgBqGtXtA3rgVkGuoWAJIeKL6NtDcLUUAsBEY5m2irLUnhodqpU1OXiEwL3E8haRwSXKlDIH5TWo+FvCEwDwdUzCZi/Z7AM88QiPWiAsJb3KoB033W6jcBeu06yYqR+NL+kYwyD5n3/NuTrMmqwf5GGsmO2z7xQAAAABJRU5ErkJggg=='}
+            alt=''
+            style={{ cursor: save ? 'default' : 'pointer', opacity: save ? 0.5 : 1 }} //활성화 비활성화를 나타내는 것이라고 함
+          />
+           :
+            <img className={styles.main_icon} 
+            onClick={clickSave}
+            src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADsSURBVHgB7ZThDYIwEIWvxgEcATfACaQbMIIbiBPgBuIIjuAEtRO4AiOwAb4zNFED7WFq5AcvufRIufeR3hWiWf+WGtowxiRKqTvSFQXUtu1Ba1317S08dUeJOQsfsh/a8wGiSApocAxnhEVec86rpFAEgOEGZ1wgMpfzyuAYgBqGtXtA3rgVkGuoWAJIeKL6NtDcLUUAsBEY5m2irLUnhodqpU1OXiEwL3E8haRwSXKlDIH5TWo+FvCEwDwdUzCZi/Z7AM88QiPWiAsJb3KoB033W6jcBeu06yYqR+NL+kYwyD5n3/NuTrMmqwf5GGsmO2z7xQAAAABJRU5ErkJggg==' alt='' />
+          }
+         </div>
           
           {/* 닉네임 날짜 수정 삭제 */}
           <div className={styles.view_nick}>
@@ -281,9 +306,10 @@ const handleEdit = async () => {
           </div>
 
           {/* 끄덕임 버튼 */}
-          <button className={styles.view_btn}>
-            <img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAFZSURBVHgBzVPRUcMwDLVz/ONsUCYgbFBG6AQtExAmaDsBZQK6QcsEbSagTEAmSMwCCe+5Sk+4aY7P6u6dLOdZepJjY67N7NBH59zYWvvetm2JcAnMETvET977w78TpWn6rcIRUHY16rpONTcxw+YADwUT+EI8zcfEm6EsbAGtbKS9CddUphKeLLSGWWRS3aD3/R9Jzs2YSCcHZ31WlQPFLFqFDQ8DI52M3+jNBbNyMztUeoF/jVpbwX1JWMZqtekZHeQwr3mbJEkOn0fqmfhDn0HyMPjeW+M/UlXVDEnvBA9QuwRyqleokXweKzJR9Z2Om6YxOBhUcAxcIH4GFuD+9ClyQjozc/yXCpkVW8rEb0+KMJMpSKEKKtxivegbLi8HWIM3RViC9wheyVvLsPmpuAVwL8q8kD3fmDk+k7CP+A3trrph2wvzIXlM4EAm23wqPLRnK12C67VfVemwXp4OOFYAAAAASUVORK5CYII=' alt='' className={styles.view_icon} />
-            끄덕임 0개
+          <button className={styles.view_btn} onClick={clickLike}>
+            <img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAFZSURBVHgBzVPRUcMwDLVz/ONsUCYgbFBG6AQtExAmaDsBZQK6QcsEbSagTEAmSMwCCe+5Sk+4aY7P6u6dLOdZepJjY67N7NBH59zYWvvetm2JcAnMETvET977w78TpWn6rcIRUHY16rpONTcxw+YADwUT+EI8zcfEm6EsbAGtbKS9CddUphKeLLSGWWRS3aD3/R9Jzs2YSCcHZ31WlQPFLFqFDQ8DI52M3+jNBbNyMztUeoF/jVpbwX1JWMZqtekZHeQwr3mbJEkOn0fqmfhDn0HyMPjeW+M/UlXVDEnvBA9QuwRyqleokXweKzJR9Z2Om6YxOBhUcAxcIH4GFuD+9ClyQjozc/yXCpkVW8rEb0+KMJMpSKEKKtxivegbLi8HWIM3RViC9wheyVvLsPmpuAVwL8q8kD3fmDk+k7CP+A3trrph2wvzIXlM4EAm23wqPLRnK12C67VfVemwXp4OOFYAAAAASUVORK5CYII=' 
+            alt='' className={styles.view_icon}/>
+            끄덕임 {post.likeSize}개
           </button>
         </div>
 

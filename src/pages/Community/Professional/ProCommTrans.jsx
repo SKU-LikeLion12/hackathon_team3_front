@@ -1,57 +1,103 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect  } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import styles from '../Comm.module.css';
 import 'pretendard/dist/web/static/pretendard.css';
 import { FaAngleRight } from "react-icons/fa";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate ,useParams} from 'react-router-dom';
 import axios from 'axios';
 
 export default function ProCommTrans() {
-    const navigate = useNavigate();
-    const goToMain = () => { navigate('/') };
-    const goToComm = () => { navigate('/comm_list') };
-    const goToproComm = () => { navigate('/pro_comm_list') };
-  
-    const proToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3bmdsMTIzIiwiaWF0IjoxNzIxODI4MjA4LCJyb2xlIjoiRXhwZXJ0IiwiZXhwIjoxNzIxODMxODA4fQ.9IZnTQVTHd0OKxrDwyPUu72DAaTIEKXFK9hu7Md45JAr8ZR8yUKphDKXIxshvxOVa2-Ojrpvh05HUQWRN5bWrA';
-  
-    const [role, setRole] = useState(null);
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
-  
-    useEffect(() => {
-      if (proToken) {
-        const decodedToken = jwtDecode(proToken);
-        setRole(decodedToken.role);
-      }
-    }, [proToken]);
-  
-    const handleTitleChange = (e) => {
-      setTitle(e.target.value);
-    };
-  
-    const handleContentChange = (e) => {
-      setContent(e.target.value);
-    };
-  
-    const handleSubmit = async () => {
-      if (role !== 'Expert') {
-        console.error('전문가 회원이 아닙니다');
-        alert('전문가 회원이 아닙니다. 고민 끄적끄적을 이용해주세요');
-        return;
-      }
+  const { id } = useParams();
+  const [post, setPost] = useState(null);
+  const [newTitle, setNewTitle] = useState('');
+  const [newContent, setNewContent] = useState('');
+  const [newCategory, setNewCategory] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [memberToken, setMemberToken] = useState('');
+  const [role, setRole] = useState('');
+
+  const navigate = useNavigate();
+  const goToMain = () => { navigate('/') };
+  const goToComm = () => { navigate('/comm_list') };
+  const goToproComm = () => { navigate('/pro_comm_list') };
+
+  // 로그인을 위한 토큰 가져오기
+  useEffect(() => {
+    const storedToken = localStorage.getItem('memberToken');
+    if (storedToken) {
       try {
-        const response = await axios.post('http://52.78.131.56:8080/expert/post', {
-          title,
-          content,
-          token: proToken,
-        });
-        alert('글이 성공적으로 등록되었습니다.');
-        navigate('/pro_comm_list');  // 성공 후 목록 페이지로 이동
+        const decodedMemberToken = jwtDecode(storedToken);
+        setMemberToken(storedToken);
+        setRole(decodedMemberToken.role);
       } catch (error) {
-        console.error('데이터를 전송하는데 실패했습니다', error);
-        alert('데이터를 전송하지 못했습니다.');
+        console.error('토큰 해독 실패', error);
+      }
+    } else {
+      console.error('토큰을 찾을 수 없습니다.');
+    }
+  }, []);
+
+
+  useEffect(() => {
+    const getPost = async () => {
+      try {
+        const response = await axios.get(`http://52.78.131.56:8080/expert/post/${id}`);
+        const postData = response.data;
+
+        setPost(postData);
+        setNewTitle(postData.title);
+        setNewContent(postData.content);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false);
       }
     };
+
+    getPost();
+  }, [id]);
+
+  const handleEdit = async () => {
+    if (!memberToken) {
+      alert('로그인이 필요합니다.');
+      navigate('/login');
+      return;
+    }
+
+    console.log('수정할 내용들:', {
+      title: newTitle,
+      content: newContent,
+      category: newCategory,
+      token: memberToken,
+    });
+
+    try {
+      await axios.put(`http://52.78.131.56:8080/expert/post/${id}`, {
+        title: newTitle,
+        content: newContent,
+        token: memberToken, // 토큰을 바디에 포함
+      });
+
+      alert('게시글이 성공적으로 수정되었습니다.');
+      window.location.href = '/pro_comm_list';
+    } catch (error) {
+      console.error('게시글 수정에 실패했습니다:', error);
+      alert('게시글을 수정하지 못했습니다.');
+    }
+  };
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>에러 발생: {error.message}</p>;
+  }
+
+  if (!post) {
+    return <p>게시글을 찾을 수 없습니다.</p>;
+  }
     
   
     return (
@@ -89,8 +135,8 @@ export default function ProCommTrans() {
               <input 
                 type='text' 
                 className={styles.write_input} 
-                value={title} 
-                onChange={handleTitleChange} 
+                value={newTitle} 
+                onChange={e => setNewTitle(e.target.value)}
               />
             </div>
   
@@ -100,15 +146,15 @@ export default function ProCommTrans() {
               <textarea 
                 className={styles.write_textarea} 
                 placeholder='비하/욕설 등과 같은 게시글은 관리자에 의해 블라인드 처리될 수 있습니다.' 
-                value={content} 
-                onChange={handleContentChange} 
+                value={newContent} 
+                onChange={e => setNewContent(e.target.value)}
               />
             </div>
   
             {/* 버튼 부분 */}
             <div className={styles.write_header3}>
               <button className={styles.cancell_btn} onClick={goToproComm}>취소</button>
-              <button className={styles.add_btn} onClick={handleSubmit}>등록</button>
+              <button className={styles.add_btn} onClick={handleEdit}>등록</button>
             </div>
           </div>
         </div>

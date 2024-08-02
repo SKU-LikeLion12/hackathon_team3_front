@@ -14,7 +14,7 @@ export default function CommView() {
   const navigate = useNavigate();
   const [content, setContent] = useState(''); //댓글 달기
   const [comments, setComments] = useState([]); // 댓글 보기
-  const [currentUserId, setCurrentUserId] = useState(null); //현재 로그인한 유저 정보
+  
 
   //끄적이기 로그인 여부 확인 계속 true 상태, 오류 잡아야 됨
   const [isLogined, setIsLogined] = useState(false);
@@ -46,7 +46,6 @@ useEffect(() => {
       const decodedToken = jwtDecode(memberToken);
       setRole(decodedmemberToken.role);
       setIsLogined(true); // 로그인 상태 업데이트
-      setCurrentUserId(decodedToken.id); // 로그인한 사용자 ID 
     } catch (error) {
       console.error('토큰 해독 실패', error);
       setIsLogined(false);
@@ -55,6 +54,17 @@ useEffect(() => {
     setIsLogined(false);
   }
 }, []);
+
+//수정과 삭제 권한을 위함
+const 작성자토큰 = (token) => {
+  try {
+    const decodedToken = jwtDecode(token);
+    return decodedToken.id; 
+  } catch (error) {
+    console.error('토큰 디코딩 실패:', error);
+    return null;
+  }
+};
 
   // 글 불러오기
   useEffect(() => {
@@ -167,10 +177,11 @@ useEffect(() => {
   }
 
   // 게시글 삭제
-  const commentDelete = async () => {
-    if (currentUserId !== post.writerId) { 
-      alert('삭제 권한이 없습니다.');
-    } else {
+  const postDelete = async () => {
+    const token = localStorage.getItem('memberToken'); //이게 현재 로그인한 토큰
+    const tokenWriterId = 작성자토큰(token); //이게 게시글 토큰
+
+    if (tokenWriterId && tokenWriterId === post.writerId) {
       try {
         // 콘솔에 토큰 정보 출력
         console.log('토큰:', localStorage.getItem('memberToken'));
@@ -185,13 +196,18 @@ useEffect(() => {
         console.error('게시글 삭제에 실패했습니다', error);
         alert('게시글을 삭제하지 못했습니다.');
       }
+    } else {
+      alert('삭제 권한이 없습니다.');
     }
   };
   
 
 // 게시글 수정
 const handleEdit = () => {
-  if (currentUserId === post.writerId) { 
+  const token = localStorage.getItem('memberToken'); //이게 현재 로그인한 토큰
+  const tokenWriterId = 작성자토큰(token); //이게 게시글 토큰
+
+  if (tokenWriterId && tokenWriterId === post.writerId) {
     navigate(`/comm_trans/${post.id}`); 
   } else {
     alert('수정 권한이 없습니다.');
@@ -240,7 +256,7 @@ const handleEdit = () => {
             <p className={styles.view_p3} onClick={handleEdit}>
             수정
             </p>
-            <p className={styles.view_p3} onClick={commentDelete}>삭제</p>
+            <p className={styles.view_p3} onClick={postDelete}>삭제</p>
           </div>
 
           {/* 내용 부분 */}

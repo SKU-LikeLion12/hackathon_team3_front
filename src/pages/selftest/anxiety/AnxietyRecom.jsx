@@ -45,14 +45,14 @@ const lv4 = sum > 40
         <div className={styles.recomendVideo}>
           <div className={styles.recomendVideoBox}>
             
-            <img src='https://img.youtube.com/vi/zU81s9OF31M/sddefault.jpg' 
-            onClick={() => window.open('https://www.youtube.com/watch?v=zU81s9OF31M', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
+            <img src='https://img.youtube.com/vi/9XyqXf3kNMM/sddefault.jpg' 
+            onClick={() => window.open('https://www.youtube.com/watch?v=9XyqXf3kNMM', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
            
           </div>
           <div className={styles.recomendVideoBox}>
           
-          <img src='https://img.youtube.com/vi/jrHSX15T0X0/sddefault.jpg'
-          onClick={() => window.open('https://www.youtube.com/shorts/jrHSX15T0X0', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
+          <img src='https://img.youtube.com/vi/XTHkgcb9GYA/sddefault.jpg'
+          onClick={() => window.open('https://www.youtube.com/watch?v=XTHkgcb9GYA', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
          
           </div>
         </div>
@@ -82,16 +82,14 @@ const lv4 = sum > 40
         <div className={styles.recomendVideo}>
         <div className={styles.recomendVideoBox}>
             
-            <img src='https://img.youtube.com/vi/ziGnBQ6bkr4
-/sddefault.jpg' 
-            onClick={() => window.open('https://www.youtube.com/shorts/ziGnBQ6bkr4', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
+            <img src='https://img.youtube.com/vi/9XyqXf3kNMM/sddefault.jpg' 
+            onClick={() => window.open('https://www.youtube.com/watch?v=9XyqXf3kNMM', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
            
           </div>
           <div className={styles.recomendVideoBox}>
           
-          <img src='https://img.youtube.com/vi/BAEEboQ3V2Y
-/sddefault.jpg'
-          onClick={() => window.open('https://www.youtube.com/watch?v=BAEEboQ3V2Y', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
+          <img src='https://img.youtube.com/vi/nDTTjoSAD1k/sddefault.jpg'
+          onClick={() => window.open('https://www.youtube.com/watch?v=nDTTjoSAD1k', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
          
           </div>
         </div>
@@ -124,15 +122,14 @@ const lv4 = sum > 40
         <div className={styles.recomendVideo}>
         <div className={styles.recomendVideoBox}>
             
-            <img src='https://img.youtube.com/vi/i8He4ytu5tQ
-/sddefault.jpg' 
-            onClick={() => window.open('https://www.youtube.com/watch?v=i8He4ytu5tQ', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
+            <img src='https://img.youtube.com/vi/7XCx1XcVP5w/sddefault.jpg' 
+            onClick={() => window.open('https://www.youtube.com/watch?v=7XCx1XcVP5w', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
            
           </div>
           <div className={styles.recomendVideoBox}>
           
-          <img src='https://img.youtube.com/vi/0u5zfUKvIXM/sddefault.jpg'
-          onClick={() => window.open('https://www.youtube.com/watch?v=0u5zfUKvIXM', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
+          <img src='https://img.youtube.com/vi/K5EVhkbcsEo/sddefault.jpg'
+          onClick={() => window.open('https://www.youtube.com/watch?v=K5EVhkbcsEo', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
          
           </div>
         </div>
@@ -166,14 +163,14 @@ const lv4 = sum > 40
         <div className={styles.recomendVideo}>
         <div className={styles.recomendVideoBox}>
             
-            <img src='https://img.youtube.com/vi/rErdbqGmsD4/sddefault.jpg' 
-            onClick={() => window.open('https://www.youtube.com/shorts/rErdbqGmsD4', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
+            <img src='https://img.youtube.com/vi/A2FjPz4ILhw/sddefault.jpg' 
+            onClick={() => window.open('https://www.youtube.com/watch?v=A2FjPz4ILhw', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
            
           </div>
           <div className={styles.recomendVideoBox}>
           
-          <img src='https://img.youtube.com/vi/oKR5koNhyzg/sddefault.jpg'
-          onClick={() => window.open('https://www.youtube.com/watch?v=oKR5koNhyzg', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
+          <img src='https://img.youtube.com/vi/Es0VRseBjBY/sddefault.jpg'
+          onClick={() => window.open('https://www.youtube.com/watch?v=Es0VRseBjBY', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
          
           </div>
         </div>

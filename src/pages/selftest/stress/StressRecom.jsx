@@ -45,14 +45,14 @@ export default function StressRecom({sum}) {
         <div className={styles.recomendVideo}>
           <div className={styles.recomendVideoBox}>
             
-            <img src='https://img.youtube.com/vi/zU81s9OF31M/sddefault.jpg' 
-            onClick={() => window.open('https://www.youtube.com/watch?v=zU81s9OF31M', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
+            <img src='https://img.youtube.com/vi/38A3lnTd4Hc/sddefault.jpg' 
+            onClick={() => window.open('https://www.youtube.com/shorts/38A3lnTd4Hc', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
            
           </div>
           <div className={styles.recomendVideoBox}>
           
-          <img src='https://img.youtube.com/vi/jrHSX15T0X0/sddefault.jpg'
-          onClick={() => window.open('https://www.youtube.com/shorts/jrHSX15T0X0', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
+          <img src='https://img.youtube.com/vi/Fs0qitF-qWM/sddefault.jpg'
+          onClick={() => window.open('https://www.youtube.com/watch?v=Fs0qitF-qWM', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
          
           </div>
         </div>
@@ -82,16 +82,14 @@ export default function StressRecom({sum}) {
         <div className={styles.recomendVideo}>
         <div className={styles.recomendVideoBox}>
             
-            <img src='https://img.youtube.com/vi/ziGnBQ6bkr4
-/sddefault.jpg' 
-            onClick={() => window.open('https://www.youtube.com/shorts/ziGnBQ6bkr4', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
+            <img src='https://img.youtube.com/vi/sEam0Ptr0as/sddefault.jpg' 
+            onClick={() => window.open('https://www.youtube.com/shorts/sEam0Ptr0as', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
            
           </div>
           <div className={styles.recomendVideoBox}>
           
-          <img src='https://img.youtube.com/vi/BAEEboQ3V2Y
-/sddefault.jpg'
-          onClick={() => window.open('https://www.youtube.com/watch?v=BAEEboQ3V2Y', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
+          <img src='https://img.youtube.com/vi/2YHbYdjNKfI/sddefault.jpg'
+          onClick={() => window.open('https://www.youtube.com/watch?v=2YHbYdjNKfI', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
          
           </div>
         </div>
@@ -124,15 +122,14 @@ export default function StressRecom({sum}) {
         <div className={styles.recomendVideo}>
         <div className={styles.recomendVideoBox}>
             
-            <img src='https://img.youtube.com/vi/i8He4ytu5tQ
-/sddefault.jpg' 
-            onClick={() => window.open('https://www.youtube.com/watch?v=i8He4ytu5tQ', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
+            <img src='https://img.youtube.com/vi/EKo_UWFphVg/sddefault.jpg' 
+            onClick={() => window.open('https://www.youtube.com/watch?v=EKo_UWFphVg', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
            
           </div>
           <div className={styles.recomendVideoBox}>
           
-          <img src='https://img.youtube.com/vi/0u5zfUKvIXM/sddefault.jpg'
-          onClick={() => window.open('https://www.youtube.com/watch?v=0u5zfUKvIXM', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
+          <img src='https://img.youtube.com/vi/yLhatSyGG34/sddefault.jpg'
+          onClick={() => window.open('https://www.youtube.com/shorts/yLhatSyGG34', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
          
           </div>
         </div>
@@ -166,14 +163,14 @@ export default function StressRecom({sum}) {
         <div className={styles.recomendVideo}>
         <div className={styles.recomendVideoBox}>
             
-            <img src='https://img.youtube.com/vi/rErdbqGmsD4/sddefault.jpg' 
-            onClick={() => window.open('https://www.youtube.com/shorts/rErdbqGmsD4', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
+            <img src='https://img.youtube.com/vi/_E4dthXGvjE/sddefault.jpg' 
+            onClick={() => window.open('https://www.youtube.com/watch?v=_E4dthXGvjE', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
            
           </div>
           <div className={styles.recomendVideoBox}>
           
-          <img src='https://img.youtube.com/vi/oKR5koNhyzg/sddefault.jpg'
-          onClick={() => window.open('https://www.youtube.com/watch?v=oKR5koNhyzg', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
+          <img src='https://img.youtube.com/vi/WoVNidsqFdo/sddefault.jpg'
+          onClick={() => window.open('https://www.youtube.com/watch?v=WoVNidsqFdo', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
          
           </div>
         </div>
@@ -206,15 +203,14 @@ export default function StressRecom({sum}) {
         <div className={styles.recomendVideo}>
         <div className={styles.recomendVideoBox}>
             
-            <img src='https://img.youtube.com/vi/WYmnqBaWtW0
-/sddefault.jpg' 
-            onClick={() => window.open('https://www.youtube.com/watch?v=WYmnqBaWtW0', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
+            <img src='https://img.youtube.com/vi/9b_zBrxCJRY/sddefault.jpg' 
+            onClick={() => window.open('https://www.youtube.com/watch?v=WoVNidsqFdo', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
            
           </div>
           <div className={styles.recomendVideoBox}>
           
-          <img src='https://img.youtube.com/vi/gmdNrtQVBgc/sddefault.jpg'
-          onClick={() => window.open('https://www.youtube.com/watch?v=gmdNrtQVBgc', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
+          <img src='https://img.youtube.com/vi/WoVNidsqFdo/sddefault.jpg'
+          onClick={() => window.open('https://www.youtube.com/watch?v=RKp8MN1aH24', '_blank')} alt='' style={{width:'300px' , height:'200px'}}></img>
          
           </div>
         </div>

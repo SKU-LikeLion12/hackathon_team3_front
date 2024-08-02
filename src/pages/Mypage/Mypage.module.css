@@ -196,14 +196,16 @@
 .postList{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    padding: 5px 0 5px 15px;
-    margin : 30px auto 0 120px;
+    padding: 0 0 5px 15px;
+    margin : -20px auto 0 120px;
     width: 1040px;
     border-radius: 25px;
     border: 1px solid #84a67f;
-    height: 720px;
+    height: 540px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .MyPost_p{
@@ -226,8 +228,8 @@
 
 /* 작성된 글 */
 .List{
-    height: 100%;
-    display: none;
+    /* height: 100%; */
+    display: flex;
     flex-direction: column;
     margin : 0;
     padding: 0;

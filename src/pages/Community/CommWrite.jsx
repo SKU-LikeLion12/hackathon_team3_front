@@ -12,6 +12,7 @@ export default function ProCommWrite() {
   const navigate = useNavigate();
   const goToMain = () => { navigate('/') };
   const goToComm = () => { navigate('/comm_list') };
+  const goToPro = () => { navigate('/pro_comm_list') };
 
 
   ///const generalToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuamgxMjM0IiwiaWF0IjoxNzIxOTgxMDAwLCJyb2xlIjoiR2VuZXJhbCIsImV4cCI6MTcyMTk4NDYwMH0.4QcgdIbkbmJtnuqIuZXfexcVT-piyUB-ZZo-QJpXhSBHur6KyC_HqSdlxjHCJYykIsCXmENIMqILmwOZLbuaTQ';
@@ -80,7 +81,7 @@ export default function ProCommWrite() {
           우리가 끄덕여줄게.
         </p>
         <p className={styles.CommList_left_p} onClick={goToComm}>고민 끄적끄적</p>
-        <p className={styles.CommList_left_p2}>전문의 정보 끄적끄적</p>
+        <p className={styles.CommList_left_p2} onClick={goToPro}>전문의 정보 끄적끄적</p>
       </div>
 
       {/* 오른쪽 부분 */}

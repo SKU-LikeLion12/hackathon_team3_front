@@ -15,6 +15,7 @@ export default function CommView() {
   const [content, setContent] = useState(''); //댓글 달기
   const [comments, setComments] = useState([]); // 댓글 보기
   const [save ,setSave] = useState(false); //게시글 저장
+  const [loginId , setLoginId] = useState(''); //현재 로그인 한 아이디 보기용
 
   //끄적이기 로그인 여부 확인 계속 true 상태, 오류 잡아야 됨
   const [isLogined, setIsLogined] = useState(false);
@@ -46,6 +47,9 @@ useEffect(() => {
       const decodedToken = jwtDecode(memberToken);
       setRole(decodedmemberToken.role);
       setIsLogined(true); // 로그인 상태 업데이트
+      setLoginId (decodedmemberToken.sub) //현재 로그인한 아이디
+      console.log('현재 로그인한 아이디 : ', decodedmemberToken.sub)
+      console.log('현재 로그인 정보 : ', decodedmemberToken)
     } catch (error) {
       console.error('토큰 해독 실패', error);
       setIsLogined(false);
@@ -55,18 +59,6 @@ useEffect(() => {
   }
 }, []);
 
-// ====================================================================
-
-//수정과 삭제 권한을 위함
-const 작성자토큰 = (token) => {
-  try {
-    const decodedToken = jwtDecode(token);
-    return decodedToken.id; 
-  } catch (error) {
-    console.error('토큰 디코딩 실패:', error);
-    return null;
-  }
-};
 
 // ====================================================================
 
@@ -95,13 +87,8 @@ const 작성자토큰 = (token) => {
         };
 
         const transCategoryKey = categoryKeyResult[postData.category] || 'unknown';
-
-       
-        // console.log('게시글 제목:', postData.title);
-        // console.log('게시글 내용:', postData.content);
-        // console.log('카테고리 키:', transCategoryKey);
-
-        
+        console.log('작성한 닉네임:' , postData.writer) 
+        console.log(postData)       
         setPost({ ...postData, category: transCategoryKey });
       } catch (error) {
         setError(error);
@@ -153,8 +140,8 @@ const 작성자토큰 = (token) => {
   
   // 댓글 달기
   const handleComent = async () => {
-
-    if (role == 'Expert') {
+    
+    if (role == 'EXPERT') {
       console.log('전문가 회원이다.');
       try {
         console.log(`내용 : ${content}`);
@@ -187,16 +174,12 @@ const 작성자토큰 = (token) => {
     }
   }
 
+  // =======================================================================================
+
   // 게시글 삭제
   const postDelete = async () => {
-    const token = localStorage.getItem('memberToken'); //이게 현재 로그인한 토큰
-    const tokenWriterId = 작성자토큰(token); //이게 게시글 토큰
-
-    if (tokenWriterId && tokenWriterId === post.writerId) {
+    if (loginId === post.writer) {
       try {
-        // 콘솔에 토큰 정보 출력
-        console.log('토큰:', localStorage.getItem('memberToken'));
-  
         await axios.delete(`http://52.78.131.56:8080/general/post/${id}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('memberToken')}` },
         });
@@ -215,10 +198,7 @@ const 작성자토큰 = (token) => {
 
 // 게시글 수정
 const handleEdit = () => {
-  const token = localStorage.getItem('memberToken'); //이게 현재 로그인한 토큰
-  const tokenWriterId = 작성자토큰(token); //이게 게시글 토큰
-
-  if (tokenWriterId && tokenWriterId === post.writerId) {
+  if (loginId === post.writer) {
     navigate(`/comm_trans/${post.id}`); 
   } else {
     alert('수정 권한이 없습니다.');

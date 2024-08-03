@@ -35,6 +35,7 @@ export default function CommTrans() {
   const goToComm = () => {
     navigate('/comm_list');
   };
+  const goToPro = () => { navigate('/pro_comm_list') };
 
   const { id } = useParams();
   const [post, setPost] = useState(null);
@@ -145,7 +146,7 @@ export default function CommTrans() {
         <p className={styles.CommList_left_p} onClick={goToComm}>
           고민 끄적끄적
         </p>
-        <p className={styles.CommList_left_p2}>전문의 정보 끄적끄적</p>
+        <p className={styles.CommList_left_p2} onClick={goToPro}>전문의 정보 끄적끄적</p>
       </div>
 
       <div className={styles.CommList_right}>

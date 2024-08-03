@@ -18,6 +18,7 @@ export default function ProCommView() {
   const [content, setContent] = useState(''); //댓글 달기
   const [comments, setComments] = useState([]); // 댓글 보기
   const [save ,setSave] = useState(false); //게시글 저장
+  const [loginId , setLoginId] = useState(''); //현재 로그인 한 아이디 보기용
 
   //끄적이기 로그인 여부 확인 계속 true 상태, 오류 잡아야 됨
   const [isLogined, setIsLogined] = useState(false);
@@ -46,9 +47,10 @@ useEffect(() => {
   if (memberToken) {
     try {
       const decodedToken = jwtDecode(memberToken);
-      // console.log('디코딩된 토큰:', decodedToken);
       setRole(decodedToken.role);
       setIsLogined(true);
+      setLoginId(decodedToken.sub);
+      console.log('로그인한 아이디:', decodedToken.sub);
     } catch (error) {
       console.error('토큰 해독 실패', error);
       setIsLogined(false);
@@ -71,6 +73,7 @@ useEffect(() => {
       const postData = response.data;
       console.log(postData)
       setPost(postData)
+      console.log('작성자 아이디' , postData.writer)
     } catch (error) {
       console.error('게시글을 불러오는 데 실패했습니다', error);
       alert('게시글을 불러오지 못했습니다.');
@@ -156,9 +159,8 @@ useEffect(() => {
 
 // 게시글 수정
 const handleEdit = () => {
-  //이상하게 본인 아이디인데 false로 되어 있음 
-  if (post.change===false) {
-    console.log(post.change)
+ 
+  if (post.writer === loginId) {
     navigate(`/pro_comm_trans/${post.id}`);
   } else {
     alert('수정 권한이 없습니다.');
@@ -167,10 +169,9 @@ const handleEdit = () => {
 
 // 게시글 삭제
 const postDelete = async () => {
-  console.log('현재 로그인한 토큰:', localStorage.getItem('memberToken'));
-  console.log('작성자 이름:', post.writer);
+  
 
-  if (post.change===false) {
+  if (post.writer === loginId) {
     try {
       await axios.delete(`http://52.78.131.56:8080/expert/post/${post.id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('memberToken')}` },

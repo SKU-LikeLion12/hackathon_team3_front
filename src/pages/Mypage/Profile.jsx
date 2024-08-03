@@ -7,9 +7,9 @@ import {jwtDecode} from 'jwt-decode';
 export default function Profile() {
     //링크 이동
     const navigate = useNavigate();
-    const goToBlue = () => {navigate('/blue');};
-    const goToStress = () => {navigate('/StressTest');};
-    const goToAnxiety = () => {navigate('/anxiety');};
+    const goToBlue = () => {navigate('/blueSave');};
+    const goToStress = () => {navigate('/StressSave');};
+    const goToAnxiety = () => {navigate('/anxietySave');};
     const goToPost = () => {navigate('/mypost');};
     const goToComment = () => {navigate('/mycomment');};
     const goToBookmark = () => {navigate('/mybookmark');};
@@ -87,6 +87,7 @@ export default function Profile() {
         }
       });
       setProfile(response.data);
+      console.log('사용자 정보는 :' ,response.data )
     } catch (error) {
       console.error('데이터를 불러오는데 실패했습니다', error);
       setError('데이터를 불러오지 못했습니다.');

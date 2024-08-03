@@ -110,7 +110,7 @@ export default function BlueTest ({ sum , onClick }) {
                 <div className={styles.resultBox}>
                     {/* lv3에 대한 내용 */}
                     <div className={styles.resultText}>
-                        <p>'{post.nickname}'님의 검사 결과</p>
+                        <p>'{post}'님의 검사 결과</p>
                     </div>
                     <div>
                         <div className={styles.resultScoreLine3}>
@@ -142,7 +142,7 @@ export default function BlueTest ({ sum , onClick }) {
                 <div className={styles.resultBox}>
                     {/* lv4에 대한 내용 */}
                     <div className={styles.resultText}>
-                        <p>'{post.nickname}'님의 검사 결과</p>
+                        <p>'{post}'님의 검사 결과</p>
                     </div>
                     <div>
                         <div className={styles.resultScoreLine4}>

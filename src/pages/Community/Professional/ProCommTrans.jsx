@@ -111,7 +111,7 @@ export default function ProCommTrans() {
             우리가 끄덕여줄게.
           </p>
           <p className={styles.CommList_left_p2} onClick={goToComm}>고민 끄적끄적</p>
-          <p className={styles.CommList_left_p}>전문의 정보 끄적끄적</p>
+          <p className={styles.CommList_left_p} onClick={goToproComm}>전문의 정보 끄적끄적</p>
         </div>
   
         {/* 오른쪽 부분 */}

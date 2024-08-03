@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState , useEffect } from 'react'
 import styles2 from './Mypage.module.css'; // 마이페이지에서 가져온 스타일
 import { useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
 
 const BlueSave = () => {
     const Navigate = useNavigate();
@@ -9,6 +9,28 @@ const BlueSave = () => {
     const goToBlue =()=>{
         Navigate('/blue')
     }
+
+    const [show , setShow] = useState([]); //테스트 결과를 가져와서 담을 공간
+
+    useEffect(() => {
+        const memberToken = localStorage.getItem('memberToken');
+        console.log(memberToken)
+        const getTestResult = async () => {
+          try {
+            const response = await axios.get('http://52.78.131.56:8080/test/result',{
+                headers: {
+                    Authorization: `Bearer ${memberToken}`
+                  }
+                // token : memberToken
+            });
+         
+            setShow(response.data);
+          } catch (err) {
+            // setError(err);
+          }
+        };
+        getTestResult();
+      }, []);
 
   return (
     <div className={styles2.MyPost}>

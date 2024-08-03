@@ -78,7 +78,7 @@ export default function MyPost() {
           mypost.map((mypost, i) => (
             <Link 
               key={mypost.id} 
-              to={role === 'Expert' ? `/pro_comm_view/${mypost.id}` : `/comm_view/${mypost.id}`} 
+              to={role === 'EXPERT' ? `/pro_comm_view/${mypost.id}` : `/comm_view/${mypost.id}`} 
               className={styles.CommList_main}
             >
               <div className={styles2.List} style={{ display:'flex'}}>

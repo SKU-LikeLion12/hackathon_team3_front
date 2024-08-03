@@ -81,7 +81,7 @@ export default function MyComment() {
           mycomment.map((mycomment, i) => (
             <Link 
               key={mycomment.id} 
-              to={role === 'Expert' ? `/pro_comm_view/${mycomment.id}` : `/comm_view/${mycomment.id}`} 
+              to={role === 'EXPERT' ? `/pro_comm_view/${mycomment.id}` : `/comm_view/${mycomment.id}`} 
               className={styles.CommList_main}
             >
               <div className={styles2.List} style={{ display:'flex'}}>
@@ -111,7 +111,7 @@ export default function MyComment() {
           <div className={styles2.No_postList}>
         <p>유저님이 댓글단 게시물이 없습니다.<br/>
         고민이 있는 분에게 다정함 한 스푼을 건네보세요.🌸</p>
-        <Link to={role === 'Expert' ? '/pro_comm_list' : '/comm_list'}>
+        <Link to={role === 'EXPERT' ? '/pro_comm_list' : '/comm_list'}>
         <button className={styles2.No_postList_btn02}>다정함 건네러가기</button>
       </Link>
         </div>

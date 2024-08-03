@@ -27,7 +27,7 @@ const LoginNav = () => {
   };
 
   const goToCommu = () => {
-    navigate('/pro_comm_list');
+    navigate('/comm_list');
   };
 
   const map = () => {

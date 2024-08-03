@@ -1,75 +1,85 @@
-import React from 'react'
-import styles from './Fixed.module.css'
-import { useNavigate } from 'react-router-dom'
-
+import React, { useEffect, useState } from 'react';
+import styles from './Fixed.module.css';
+import { useNavigate } from 'react-router-dom';
 
 const LoginNav = () => {
-  const Navigate =useNavigate();
+  const navigate = useNavigate(); // useNavigate 훅을 통해 페이지 이동
 
-  const goToBlue=()=>{
-    Navigate('/blue')
-  }
+  const goToBlue = () => {
+    navigate('/blue');
+  };
 
-  const goToMain=()=>{
-    Navigate("/")
-  }
+  const goToMain = () => {
+    navigate('/');
+  };
 
-  const goToLogin=()=>{
-    Navigate("login")
-  }
+  const goToLogin = () => {
+    navigate('/login');
+  };
 
-  const goToMypage=()=>{
-    Navigate("/profile/:userId")
-  }
-  const goToCommu=()=>{
-    Navigate("comm_list")
-  }
+  const goToMypage = () => {
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      navigate(`/member/${userId}`);
+    } else {
+      console.error('사용자 ID를 찾을 수 없습니다.');
+    }
+  };
 
-  const map=()=>{
-    Navigate("hospital_map")
-  }
+  const goToCommu = () => {
+    navigate('/pro_comm_list');
+  };
 
-   //로그아웃
-   const handleLogout = () => {
+  const map = () => {
+    navigate('/hospital_map');
+  };
+
+  const [isLogined, setIsLogined] = useState(false);
+
+  useEffect(() => {
+    const loggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+    setIsLogined(loggedIn);
+  }, []);
+
+  // 로그아웃 처리
+  const handleLogout = () => {
     localStorage.removeItem('memberToken');
     localStorage.removeItem('savedId');
     sessionStorage.removeItem('isLoggedIn');
-    Navigate('/login'); // 또는 로그아웃 후 이동할 페이지
+    navigate('/login'); // 로그아웃 후 로그인 페이지로 이동
   };
 
   return (
+    <header> 
+      <div className={styles.header}>
+        <div className={styles.textalign1} onClick={goToMain}>끄적임</div>
 
-  <header> 
-    <div className={styles.header}>
-      <div className={styles.textalign1} onClick={goToMain}>끄적임</div>
+        <div className={styles.textalign2}>
+          <div className={styles.text2margin}>
+            <div onClick={handleLogout}>로그아웃</div>
+          </div>
 
-      <div className={styles.textalign2}>
-        <div className={styles.text2margin}>
-          <div onClick={handleLogout}>로그아웃</div>
+          <div className={styles.text2margin}>
+            <div style={{color: 'gray'}}>|</div>
+          </div>
+
+          <div className={styles.text2margin}>
+            <div onClick={goToMypage}>마이페이지</div>
+          </div>  
         </div>
-
-        <div className={styles.text2margin}>
-          <div style={{color: 'gray'}}>|</div>
-        </div>
-
-        <div className={styles.text2margin}>
-        <div onClick={goToMypage}>마이페이지</div>
-        </div>  
       </div>
-    </div>
 
-    <nav className={styles.nav}>
-      <ul className={styles.navflex}>
-      <li className={styles.navTextMargin} onClick={goToCommu}>커뮤니티</li>
-        <li style={{color: 'gray'}} className={styles.navTextMargin}>|</li>
-        <li className={styles.navTextMargin} onClick={goToBlue}>자가진단</li>
-        <li style={{color: 'gray'}} className={styles.navTextMargin}>|</li>
-        <li className={styles.navTextMargin} onClick={map}>내 주변 병원 찾기</li>
-      </ul>
-    </nav>
+      <nav className={styles.nav}>
+        <ul className={styles.navflex}>
+          <li className={styles.navTextMargin} onClick={goToCommu}>커뮤니티</li>
+          <li style={{color: 'gray'}} className={styles.navTextMargin}>|</li>
+          <li className={styles.navTextMargin} onClick={goToBlue}>자가진단</li>
+          <li style={{color: 'gray'}} className={styles.navTextMargin}>|</li>
+          <li className={styles.navTextMargin} onClick={map}>내 주변 병원 찾기</li>
+        </ul>
+      </nav>
+    </header>
+  );
+};
 
-  </header>
-  )
-}
-
-export default LoginNav
+export default LoginNav;

@@ -1,5 +1,3 @@
-//유저가 작성한 글
-
 import React, { useEffect, useState } from 'react';
 import styles from '../Community/Comm.module.css'; // 커뮤니티에서 가져온 스타일
 import 'pretendard/dist/web/static/pretendard.css'; // 프리텐다드 폰트 스타일
@@ -83,7 +81,7 @@ export default function MyPost() {
               to={role === 'Expert' ? `/pro_comm_view/${mypost.id}` : `/comm_view/${mypost.id}`} 
               className={styles.CommList_main}
             >
-              <div className={styles2.List}>
+              <div className={styles2.List} style={{ display:'flex'}}>
                 <h3 className={styles.main_h3}>{mypost.title}</h3>
                 <p className={styles.main_p}>{mypost.content}</p>
                 {/* 맨 밑에 부분 */}
@@ -102,8 +100,7 @@ export default function MyPost() {
                     <img className={styles.main_icon} src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADsSURBVHgB7ZThDYIwEIWvxgEcATfACaQbMIIbiBPgBuIIjuAEtRO4AiOwAb4zNFED7WFq5AcvufRIufeR3hWiWf+WGtowxiRKqTvSFQXUtu1Ba1317S08dUeJOQsfsh/a8wGiSApocAxnhEVec86rpFAEgOEGZ1wgMpfzyuAYgBqGtXtA3rgVkGuoWAJIeKL6NtDcLUUAsBEY5m2irLUnhodqpU1OXiEwL3E8haRwSXKlDIH5TWo+FvCEwDwdUzCZi/Z7AM88QiPWiAsJb3KoB033W6jcBeu06yYqR+NL+kYwyD5n3/NuTrMmqwf5GGsmO2z7xQAAAABJRU5ErkJggg==' alt='' />
                   </div>
                 </div>
-                {/* {i !== mypost.length - 1 && <div className={styles2.line}></div>} */}
-                <div className={styles2.line}></div>
+                {i !== mypost.length - 1 && <div className={styles2.line}></div>}
               </div>
             </Link>
           ))

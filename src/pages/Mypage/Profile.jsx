@@ -5,7 +5,6 @@ import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
 
 export default function Profile() {
-    
     //링크 이동
     const navigate = useNavigate();
     const goToBlue = () => {navigate('/blue');};
@@ -39,64 +38,73 @@ export default function Profile() {
     const [activeIconIndex, setActiveIconIndex] = useState(null);
     const clickIcon = (index) => {console.log(`선택된 아이콘: ${index}`);setActiveIconIndex(index);};
 
+    // 로그인 유지
     const [isLogined, setIsLogined] = useState(false);
     const [role, setRole] = useState(null);
-    const [userId, setUserId] = useState(null); 
-    const [profile, setProfile] = useState([]);
-
+        
     useEffect(() => {
         const loggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
         setIsLogined(loggedIn);
     }, []);
-
+    
     useEffect(() => {
         const memberToken = localStorage.getItem('memberToken');
         if (memberToken) {
-            try {
-                const decodedmemberToken = jwtDecode(memberToken);
-                console.log(decodedmemberToken);
-                setRole(decodedmemberToken.role);
-                setIsLogined(true); // 로그인 상태 업데이트
-                const userIdFromToken = decodedmemberToken.sub;
-                setUserId(userIdFromToken);
-                localStorage.setItem('userId', userIdFromToken); // userId를 localStorage에 저장
-            } catch (error) {
-                console.error('토큰 해독 실패', error);
-                setIsLogined(false);
-            }
-        } else {
+        try {
+            const decodedmemberToken = jwtDecode(memberToken);
+            setRole(decodedmemberToken.role);
+            setIsLogined(true); // 로그인 상태 업데이트
+        } catch (error) {
+            console.error('토큰 해독 실패', error);
             setIsLogined(false);
+        }
+        } else {
+        setIsLogined(false);
         }
     }, []);
 
-    const fetchProfile = async (userId) => {
-        const memberToken = localStorage.getItem('memberToken');
-        console.log('유저 아이디:', userId);
-        console.log('토큰값:', memberToken);
+    //프로필 회원정보가져오기
 
-        try {
-            const response = await axios.get(`http://52.78.131.56:8080/member/${userId}`, {
-                headers: {
-                    Authorization: `Bearer ${memberToken}`
-                }
-            });
-            setProfile(response.data);
-            console.log('Response Data:', response.data);
-        } catch (error) {
-            // 오류에 대한 더 많은 정보 로그 추가
-            console.error('데이터를 불러오는데 실패했습니다', error);
-        }
-    };
+  const { id } = useParams(); // URL 파라미터에서 id 가져오기
+  const [profile, setProfile] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    useEffect(() => {
-        if (isLogined) {
-            const userIdFromStorage = localStorage.getItem('userId');
-            if (userIdFromStorage) {
-                setUserId(userIdFromStorage);
-                fetchProfile(userIdFromStorage);
-            }
+
+  const fetchProfile = async (id) => {
+    const memberToken = localStorage.getItem('memberToken');
+    if (!id) {
+      setError('사용자 ID가 제공되지 않았습니다.');
+      setLoading(false);
+      return;
+    }
+    
+    const url = `http://52.78.131.56:8080/member/${id}`; // URL 확인
+    try {
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${memberToken}`
         }
-    }, [isLogined]);
+      });
+      setProfile(response.data);
+    } catch (error) {
+      console.error('데이터를 불러오는데 실패했습니다', error);
+      setError('데이터를 불러오지 못했습니다.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    console.log('ID from useParams:', id); // URL 파라미터 확인
+  
+    if (isLogined && id) {
+      fetchProfile(id);
+    } else if (!isLogined) {
+      setError('로그인 정보가 없습니다.');
+      setLoading(false);
+    }
+  }, [isLogined, id]);
 
 
     return (
@@ -145,7 +153,7 @@ export default function Profile() {
                  <div className={styles.Profile_mid_content}>
                     <div className={styles.Profile_mid_content01} onClick={goToPost}>
                         <p className={styles.Profile_mid_content_p}>작성한 게시글</p>
-                        <p>0개</p>
+                        <p>{profile.length}개</p>
                     </div>
 
                     <div className={styles.Profile_mid_content_line}></div>

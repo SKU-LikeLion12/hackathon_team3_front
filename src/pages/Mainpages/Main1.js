@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './Main1.module.css'
 import { useNavigate } from 'react-router-dom'
 
@@ -13,6 +13,14 @@ const Main1 = () => {
   const goToMap=()=>{
     navgate('/hospital_map')
   }
+
+   //로그인 유지
+   const [isLogined, setIsLogined] = useState(false);
+
+   useEffect(() => {
+     const loggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+     setIsLogined(loggedIn);
+   }, []);
 
   return (
     <div>

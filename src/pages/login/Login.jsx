@@ -33,7 +33,7 @@ export default function Login() {
         try {
           const decodedToken = jwtDecode(token);
           if (decodedToken.role) {
-            navigate(`/profile/${decodedToken.sub}`);
+            navigate(`/member/${decodedToken.sub}`);
           }
         } catch (error) {
           console.error('JWT 디코딩 오류:', error.message || error);
@@ -76,6 +76,11 @@ export default function Login() {
           localStorage.setItem('memberToken', token);
           setMemberToken(token);
 
+          // JWT에서 사용자 ID 추출
+          const decodedToken = jwtDecode(token);
+          const userId = decodedToken.sub;
+          localStorage.setItem('userId', userId);
+
           if (saveId) {
             localStorage.setItem('savedId', id);
           } else {
@@ -84,7 +89,7 @@ export default function Login() {
 
           sessionStorage.setItem('isLoggedIn', 'true');
 
-          const redirectPath = sessionStorage.getItem('redirectPath') || '/main';
+          const redirectPath = sessionStorage.getItem('redirectPath') || `/member/${userId}`;
           sessionStorage.removeItem('redirectPath');
           navigate(redirectPath);
         } else {

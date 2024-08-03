@@ -3,7 +3,6 @@ import './App.css';
 import {BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 //메인 페이지
 import Main1 from './pages/Mainpages/Main1';
-import LoginMain from './pages/Mainpages/LoginMain'
 import Navbar from './components/Navbar';
 import LoginNavbar from './components/LoginNavbar';
 import Footer from './components/Footer';
@@ -54,7 +53,7 @@ function App() {
   const location = useLocation();
 
   // 로그인하기 전 페이지들
-  const authPages = ['/login', '/firstsignup', '/signup', '/findPw', '/pro_signup' , '/'];
+  const authPages = ['/login', '/firstsignup', '/signup', '/findPw', '/pro_signup'];
 
   // 현재 페이지가 로그인한건지 아닌지 
   const showNavbar = authPages.includes(location.pathname);
@@ -88,7 +87,7 @@ function App() {
           <Route path="/stressSave" element={<PrivateRoute  component={StressSave}/>} />
           <Route path="/anxietySave" element={<PrivateRoute  component={AnxietySave}/>} />
           <Route path="/hospital_map" element={<PrivateRoute component={HospitalMap} />} /> */}
-          <Route path="/profile/:userId" element={<Profile />} />
+          <Route path="/member/:id" element={<Profile />} />
           <Route path="/mypost" element={<MyPost/>} /> {/* 작성한 게시글 */}
           <Route path="/mycomment" element={<MyComment/>} />{/* 작성한 댓글 */}
           <Route path="/mybookmark" element={<MyBookmark/>} />{/* 저장한 북마크 */}
@@ -109,7 +108,7 @@ function App() {
           {/* 관리자 페이지 */}
           <Route path='/' element={<Main1 />} />
           <Route path='/manager' element={<Manager />} />
-          <Route path='/main' element={<LoginMain />} />
+          
           
         </Routes>
       </CategoryProvider>

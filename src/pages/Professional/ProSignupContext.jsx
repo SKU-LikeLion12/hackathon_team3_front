@@ -227,113 +227,90 @@ export default function ProSignupContext() {
         }
     };
     
-    const handleFileUpload = async () => {
+    const handleFileUpload = () => {
         if (!image) {
             alert('파일을 선택하세요');
             return;
         }
+      };
     
-        const formData = new FormData();
-        formData.append('userId', userId);
-        formData.append('password', pw);
-        formData.append('nickname', nickname);
-        formData.append('birth', `${birthYear}${birthMonth.padStart(2, '0')}${birthDay.padStart(2, '0')}`);
-        formData.append('gender', gender);
-        formData.append('phoneNum', phoneNum);
-        formData.append('email', email);
-        formData.append('image', image);
-    
-        // try {
-        //     console.log('URL:', 'http://52.78.131.56:8080/signup/Expert');
-        //     console.log('Form Data:', formData);
-            
-        //     const response = await axios.post('http://52.78.131.56:8080/signup/Expert', formData, {
-        //         headers: {
-        //             'Content-Type': 'multipart/form-data'
-        //         }
-        //     });
-    
-        //     if (response.status === 200) {
-        //         alert('파일이 성공적으로 업로드되었습니다');
-        //     } else {
-        //         console.error('서버 응답 에러 메시지:', response.data);
-        //         alert('파일 업로드에 실패하였습니다: ' + response.data);
-        //     }
-        // } catch (error) {
-        //     if (error.response) {
-        //         // 요청이 이루어졌고 서버가 2xx 범위 이외의 상태 코드로 응답함
-        //         console.error('응답 데이터:', error.response.data);
-        //         console.error('응답 상태:', error.response.status);
-        //         console.error('응답 헤더:', error.response.headers);
-        //     } else if (error.request) {
-        //         // 요청이 이루어졌으나 응답을 받지 못함
-        //         console.error('요청 데이터:', error.request);
-        //     } else {
-        //         // 요청 설정 중에 문제가 발생함
-        //         console.error('오류 메시지:', error.message);
-        //     }
-        //     console.error('오류 설정:', error.config);
-        //     alert('파일 업로드 중 오류가 발생했습니다');
-        // }
-    };
-    
-  
-
-   // 회원가입
-   const postProData = async () => {
-    if (pw !== checkPW) {
-      setMatchPW(true);
-      alert('다시 확인해주세요');
-      return;
-    }
-  
-    const birth = `${birthYear}${birthMonth.padStart(2, '0')}${birthDay.padStart(2, '0')}`;
-    const birthRegex = /^\d{4}\d{2}\d{2}$/;
-    if (!birthRegex.test(birth)) {
-      alert('생년월일 형식이 올바르지 않습니다.');
-      return;
-    }
-  
-    try {
-      // FormData 객체를 생성
-      const formData = new FormData();
-      formData.append('userId', userId);
-      formData.append('nickname', nickname);
-      formData.append('password', pw);
-      formData.append('birth', birth);
-      formData.append('gender', gender);
-      formData.append('phoneNum', phoneNum);
-      formData.append('email', email);
+      //회원가입
+      const postProData = async () => {
+        if (pw !== checkPW) {
+          setMatchPW(true);
+          alert('다시 확인해주세요');
+          return;
+        }
       
-      // image가 File 객체인지 확인
-      if (image instanceof File) {
-        formData.append('image', image);
-      } else {
-        console.warn('Image is not a File object');
-      }
-  
-      const response = await fetch('http://52.78.131.56:8080/signup/Expert', {
-        method: 'POST',
-        body: formData, // FormData 객체를 body로 설정
-      });
-  
-  
-      if (!response.ok) {
-        throw new Error('회원가입 요청이 실패했습니다.');
-      }
-  
-      const data = await response.json();
-      console.log('서버 응답:', data);
-      const confirmed = window.confirm('관리자의 승인까지 1~3일 소요됩니다. 로그인 페이지로 이동하시겠습니까?');
-      if (confirmed) {
-        navigate('/login'); 
-      }
-  
-    } catch (error) {
-      console.error('오류 발생:', error);
-      alert('회원가입 중 오류가 발생했습니다.');
-    }
-  };
+        const birth = `${birthYear}${birthMonth.padStart(2, '0')}${birthDay.padStart(2, '0')}`;
+        const birthRegex = /^\d{4}\d{2}\d{2}$/;
+        if (!birthRegex.test(birth)) {
+          alert('생년월일 형식이 올바르지 않습니다.');
+          return;
+        }
+      
+        try {
+          // FormData 객체를 생성
+          const formData = new FormData();
+          formData.append('userId', userId);
+          formData.append('nickname', nickname);
+          formData.append('password', pw);
+          formData.append('birth', birth);
+          formData.append('gender', gender);
+          formData.append('phoneNum', phoneNum);
+          formData.append('email', email);
+      
+          // image가 File 객체인지 확인
+          if (image instanceof File) {
+            formData.append('image', image);
+          } else {
+            console.warn('Image is not a File object');
+          }
+      
+          const response = await fetch('http://52.78.131.56:8080/signup/Expert', {
+            method: 'POST',
+            body: formData, // FormData 객체를 body로 설정
+          });
+      
+          // 응답의 상태 코드와 Content-Type 확인
+          const contentType = response.headers.get('Content-Type');
+          console.log('응답 Content-Type:', contentType);
+      
+          let responseBody;
+          if (response.ok) {
+            if (contentType && contentType.includes('application/json')) {
+              responseBody = await response.json(); // JSON 형식일 경우
+            } else {
+              responseBody = await response.text(); // JSON이 아닐 경우
+              console.warn('서버 응답 텍스트:', responseBody); // 응답 내용 로그 출력
+            }
+      
+            console.log('서버 응답 데이터:', responseBody);
+      
+            // 서버 응답에 대한 추가 처리
+            if (typeof responseBody === 'string') {
+              // 응답이 문자열인 경우 추가 처리
+              console.log('서버 응답 문자열:', responseBody);
+              // 문자열에 기반하여 추가 로직을 구현할 수 있음
+            }
+      
+            const confirmed = window.confirm('관리자의 승인까지 1~3일 소요됩니다. 로그인 페이지로 이동하시겠습니까?');
+            if (confirmed) {
+              navigate('/login');
+            }
+          } else {
+            throw new Error(`회원가입 요청이 실패했습니다. 상태 코드: ${response.status}`);
+          }
+          
+        } catch (error) {
+          console.error('오류 발생:', error);
+          alert('회원가입 중 오류가 발생했습니다.');
+        }
+      };
+      
+      
+      
+      
   
   
 

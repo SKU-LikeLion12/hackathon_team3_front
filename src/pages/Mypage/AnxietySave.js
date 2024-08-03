@@ -3,6 +3,8 @@ import styles2 from './Mypage.module.css'; // 마이페이지에서 가져온 �
 import { useNavigate } from 'react-router-dom';
 import AnxietyTest from '../selftest/anxiety/AnxietyTest';
 import axios from 'axios';
+import UseProfileContext from './UseProfileContext'
+
 
 const BlueSave = () => {
   const Navigate =useNavigate();
@@ -16,8 +18,11 @@ const BlueSave = () => {
   const [sum, setSum] = useState(0);
   const [user , setUser] =useState(null); //유저 정보 가져오기
 
+  const  {fetchmypost,  post} = UseProfileContext()
+
   useEffect(() => {
     const memberToken = localStorage.getItem('memberToken');
+    fetchmypost();
     console.log(memberToken);
 
     const getTestResult = async () => {
@@ -41,7 +46,7 @@ const BlueSave = () => {
     <div className={styles2.MyPost}>
       
         {/* 상단 부분 */}
-        <div className={styles2.MyPost_top}>
+        <div className={styles2.MyPost_toptop}>
             <div className={styles2.MyPost_top01}>
             <img className={styles2.Profile_img} src='./img/profile.jpg' alt='' />
             <p className={styles2.MyPost_top_p}>
@@ -56,7 +61,9 @@ const BlueSave = () => {
             </div>
 
             <div className={styles2.Profile_top02}>
-            <p className={styles2.Profile_top02_p1} style={{marginLeft: -30}}>{show ? show.tester : ''}</p>
+            <p className={styles2.Profile_top02_p1} style={{ marginLeft: '-80px' }}>
+          {show ? show.tester : (post.length > 0 ? post[0].writer : '')}
+            </p>
             </div>
         </div>
 

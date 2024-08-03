@@ -15,6 +15,7 @@ export default function UseProfileContext() {
             }
           });
           setPost(response.data);
+          console.log('ggggg', response.data)
         } catch (error) {
           console.error('데이터를 불러오는데 실패했습니다', error);
           alert('데이터를 불러오지 못했습니다.');
@@ -88,11 +89,13 @@ export default function UseProfileContext() {
         }
       };
    
+      // ========================================================================================
 
 
   return {fetchmypost , post,
     fetchmycomment ,coment,
     bookMark, fetchmybookmark,
-    test, getTestResult}
-
+    test, getTestResult
+    }
+    
   }

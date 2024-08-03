@@ -1,26 +1,15 @@
-import React, { useEffect, useRef, useState  } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Mypage.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
-import UseProfileContext from './UseProfileContext'
 
 
 export default function Profile() {
-
-    const  {fetchmypost,  post , 
-        fetchmycomment , coment , 
-        bookMark, fetchmybookmark,
-        test, getTestResult} = UseProfileContext()
-
     //링크 이동
     const navigate = useNavigate();
-    const goToBlue = () => {navigate('/blueSave');};
-    const goToStress = () => {navigate('/stressSave');};
-    const goToAnxiety = () => {navigate('/anxietySave');};
     const goToPost = () => {navigate('/mypost');};
     const goToComment = () => {navigate('/mycomment');};
-    const goToBookmark = () => {navigate('/mybookmark');};
 
     //아이콘 이미지들
     const iconImages = [
@@ -49,22 +38,12 @@ export default function Profile() {
     // 로그인 유지
     const [isLogined, setIsLogined] = useState(false);
     const [role, setRole] = useState(null);
-        
+
     useEffect(() => {
         const loggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
         setIsLogined(loggedIn);
-        fetchmypost();
-        fetchmycomment();
-        fetchmybookmark();
-        getTestResult();
-        //이미지가 있을 시 화면에 보여주기 위함 
-        const savedImg = localStorage.getItem('profileImg');
-        if (savedImg) {
-    setImg(savedImg);
-    } 
     }, []);
 
-    
     useEffect(() => {
         const memberToken = localStorage.getItem('memberToken');
         if (memberToken) {
@@ -88,29 +67,143 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-//   ========================================================================
-
   //프로필 사진 업로드 해보기
   const [img , setImg] = useState("../img/profile.jpg")
-  const imgUpload = useRef(null) //렌더링과 상관없이 저장할 때 유용하게 쓰인대
 
-  const onChange = (e) => {
-    if (e.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const imgData = reader.result;
-        setImg(imgData);
-        localStorage.setItem('profileImg', imgData); //로컬에 이미지 저장하기
-      };
-      reader.readAsDataURL(e.target.files[0]);
-    } else {
-      const defaultImg = '../img/profile.jpg';
-      setImg(defaultImg);
-      localStorage.removeItem('profileImg');
+    //프로필 불러오기
+  const fetchProfile = async (id) => {
+    const memberToken = localStorage.getItem('memberToken');
+    if (!id) {
+      setError('사용자 ID가 제공되지 않았습니다.');
+      setLoading(false);
+      return;
+    }
+
+    const url = `http://52.78.131.56:8080/member/${id}`; // URL 확인
+    try {
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${memberToken}`
+        }
+      });
+      setProfile(response.data);
+    } catch (error) {
+      console.error('데이터를 불러오는데 실패했습니다', error);
+      setError('데이터를 불러오지 못했습니다.');
+    } finally {
+      setLoading(false);
     }
   };
 
-// =============================================================================
+  useEffect(() => {
+
+    if (isLogined && id) {
+      fetchProfile(id);
+    } else if (!isLogined) {
+      setError('로그인 정보가 없습니다.');
+      setLoading(false);
+    }
+  }, [isLogined, id]);
+
+
+
+  //전문가인지 확인
+  const [expertCheck, setExpertCheck] = useState([]);
+  const [completed, setCompleted] = useState({});
+
+  const fetchExpertCheck = async () => {
+      try {
+          const response = await axios.get('http://52.78.131.56:8080/admin/expertCheck');
+          setExpertCheck(response.data);
+      } catch (error) {
+          console.error('데이터를 불러오는데 실패했습니다', error);
+          alert('데이터를 불러오지 못했습니다.');
+      } finally {
+          setLoading(false);
+      }
+  };
+
+  useEffect(() => {
+      if (isLogined) {
+          fetchExpertCheck();
+      }
+  }, [isLogined]);
+
+  // 수락버튼
+//   const handleExpertAccept = async id => {
+//       const url = `http://52.78.131.56:8080/admin/changeIsExpert/${id}`;
+//       console.log(`Sending request to: ${url} with value: true`);
+
+//       try {
+//           const response = await axios.post(url, true, {
+//               headers: {
+//                   'Content-Type': 'application/json',
+//                   Authorization: `Bearer ${localStorage.getItem('memberToken')}`,
+//               },
+//           });
+//           console.log('Response:', response.data);
+//           alert('승인되었습니다');
+//           setCompleted(prev => ({ ...prev, [id]: true }));
+//           setExpertCheck(prev => prev.map(item => (item.id === id ? { ...item, isExpert: true } : item)));
+//       } catch (error) {
+//           console.error('데이터를 불러오는데 실패했습니다', error);
+//           alert('데이터를 불러오지 못했습니다.');
+//       }
+//   };
+
+  //게시글 불러오기
+  const [mypost, setmypost] = useState([]);
+
+  const fetchmypost = async () => {
+      const memberToken = localStorage.getItem('memberToken');
+      try {
+          const response = await axios.get('http://52.78.131.56:8080/post/myposts', {
+              headers: {
+                  Authorization: `Bearer ${memberToken}`
+              }
+          });
+          setmypost(response.data);
+          console.log(`Number of posts: ${response.data.length}`);
+      } catch (error) {
+          console.error('데이터를 불러오는데 실패했습니다', error);
+          alert('데이터를 불러오지 못했습니다.');
+      }
+  };
+
+  useEffect(() => {
+      if (isLogined) {
+          fetchmypost();
+      }
+  }, [isLogined]);
+
+  //댓글 단 글 불러오기
+  const [mycomment, setmycomment] = useState([]);
+
+  const fetchmycomment = async () => {
+      const memberToken = localStorage.getItem('memberToken');
+      try {
+          const response = await axios.get('http://52.78.131.56:8080/post/mycommentposts', {
+              headers: {
+                  Authorization: `Bearer ${memberToken}`
+              }
+          });
+          setmycomment(response.data);
+      } catch (error) {
+          console.error('데이터를 불러오는데 실패했습니다', error);
+          alert('데이터를 불러오지 못했습니다.');
+      }
+  };
+
+  useEffect(() => {
+      if (isLogined) {
+          fetchmycomment();
+      }
+  }, [isLogined]);
+
+  // 로그인한 아이디
+  const loggedInUserId = localStorage.getItem('userId'); // 로그인한 사용자의 아이디
+
+  // =============================================================================
 
 //닉네임 변경부분
 const [nickInput, setNickInput] = useState(false); //닉네임 입력부분
@@ -146,68 +239,23 @@ const [nickName, setNickName] = useState('');
     
 
 // =============================================================================
-  const fetchProfile = async (id) => {
-    const memberToken = localStorage.getItem('memberToken');
-    if (!id) {
-      setError('사용자 ID가 제공되지 않았습니다.');
-      setLoading(false);
-      return;
-    }
-    
-    const url = `http://52.78.131.56:8080/member/${id}`; // URL 확인
-    try {
-      const response = await axios.get(url, {
-        headers: {
-          Authorization: `Bearer ${memberToken}`
-        }
-      });
-      setProfile(response.data);
-      console.log('사용자 정보는 :' ,response.data )
-    } catch (error) {
-      console.error('데이터를 불러오는데 실패했습니다', error);
-      setError('데이터를 불러오지 못했습니다.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    console.log('ID from useParams:', id); // URL 파라미터 확인
-  
-    if (isLogined && id) {
-      fetchProfile(id);
-    } else if (!isLogined) {
-      setError('로그인 정보가 없습니다.');
-      setLoading(false);
-    }
-  }, [isLogined, id]);
+  return (
+      <div className={styles.Profile_container}>
+          {/* 상단 부분 */}
+          <div className={styles.Profile_top} style={{ marginRight: 470 }}>
+              <div className={styles.Profile_top01}>
+                  <img className={styles.Profile_img} src={img} alt='' />
+                  <label htmlFor="fileUpload" className={styles.Profile_top01_p}>
+                      프로필 사진 변경하기
+                      <input id="fileUpload" type="file" accept=".jpg, .jpeg, .png" />
+                  </label>
+              </div>
 
 
-    return (
-        <div className={styles.Profile_container}>
-            {/* 상단 부분 */}
-            <div className={styles.Profile_top}>
-                {/* 젤 왼쪽 */}
-                <div className={styles.Profile_top01}>
-                    <input 
-                        type='file' 
-                        style={{ display: 'none' }}
-                        accept='image/jpg,image/png,image/jpeg'
-                        name='profile_img'
-                        onChange={onChange}
-                        ref={imgUpload} 
-                    />
-                    <img className={styles.Profile_img} src={img} alt='' />
-                    <label 
-                        onClick={() => imgUpload.current.click()}
-                        className={styles.Profile_top01_p}>
-                        프로필 사진 변경하기
-                    </label>
-                </div>
-
-                {/* 중간 부분 */}
-                <div className={styles.Profile_top02}>
-                    <p className={styles.Profile_top02_p1}>{profile.nickname}</p>
+              <div className={styles.Profile_top02}>
+              <p className={styles.Profile_top02_p3}>전문의</p>
+                    <p className={styles.Profile_top02_p1} style={{ marginTop: 5 }}>{profile.nickname}</p>
                     <div>
             {!nickInput ? (
                 <p className={styles.Profile_top02_p2} onClick={changeNick}>닉네임 변경하기</p>
@@ -218,94 +266,62 @@ const [nickName, setNickName] = useState('');
                         value={nickName}
                         onChange={handleInputChange}
                         placeholder="새 닉네임 입력"
-                        style ={{borderRadius:'30px' , marginTop:'15px'}}
+                        style ={{borderRadius:'30px' , marginLeft:'15px' ,marginTop:'15px'}}
                     />
                     <button onClick={handleSave} className={styles.Profile_footer_btn}>수정</button>
                 </div>
             )}
         </div>
                 </div>
+          </div>
 
-                 {/* 젤 오른쪽 */}
-            <div className={styles.Profile_top03}>
-            <p className={styles.Profile_top03_p}>마음의 날씨</p>
+          <div className={styles.Profile_mid}>
+              <p className={styles.Profile_mid_p}>나의 활동</p>
 
-                  {iconImages.map((icon, index) => 
-                  (
-                
-                        <span key={index} onClick={() => clickIcon(index)}>
-                            <img 
-                                className={styles.Profile_top03_img} 
-                                src={activeIconIndex === index ? icon.active : icon.default} 
-                                alt={`Icon ${index}`}
-                            />
-                        </span>
-                    ))}
-            </div>
-        </div>
-                {/* =============================================== */}
+              <div className={styles.Profile_mid_content}>
+                  <div className={styles.Profile_mid_content01} onClick={goToPost}>
+                      <p className={styles.Profile_mid_content_p}>작성한 게시글</p>
+                      <p>{mypost.length}개</p>
+                  </div>
 
-            {/* 중간 부분 */}
-            <div className={styles.Profile_mid}>
-                <p className={styles.Profile_mid_p}>나의 활동</p>
-                
-                 {/* 둥근 부분 */}
-                 <div className={styles.Profile_mid_content}>
-                    <div className={styles.Profile_mid_content01} onClick={goToPost}>
-                        <p className={styles.Profile_mid_content_p}>작성한 게시글</p>
-                        <p>
-                            {/* {profile.length} */}
-                            {post.length}
-                            개</p>
-                    </div>
+                  <div className={styles.Profile_mid_content_line}></div>
+                  <div className={styles.Profile_mid_content01} onClick={goToComment}>
+                      <p className={styles.Profile_mid_content_p}>댓글단 게시글</p>
+                      <p>{mycomment.length}개</p>
+                  </div>
+              </div>
+          </div>
 
-                    <div className={styles.Profile_mid_content_line}></div>
-                    <div className={styles.Profile_mid_content01} onClick={goToComment}>
-                        <p className={styles.Profile_mid_content_p}>댓글단 게시글</p>
-                        <p>
-                        {coment.length}
-                            개</p>
-                    </div>
+          <div className={styles.Profile_mid}>
+              <p className={styles.Profile_mid_p}>전문의 승인 인증</p>
 
-                    <div className={styles.Profile_mid_content_line}></div>
-                    <div className={styles.Profile_mid_content01} onClick={goToBookmark}>
-                    <p className={styles.Profile_mid_content_p}>북마크 게시글</p>
-                    <p>
-                        {bookMark.length}
-                        개</p>
-                    </div>
-                </div>
-            </div>
-        
-        {/* 바닥 부분 */}
-        <div className={styles.Profile_mid}>
-                <p className={styles.Profile_mid_p}>자가진단 결과 목록</p>
-                
-                {/* 둥근 부분 */}
-                <div className={styles.Profile_footer_content}>
-                    <div className={styles.Profile_mid_content01}>
-                        <p className={styles.Profile_mid_content_p}>우울증 자가진단</p>
-                        <p className={styles.Profile_mid_footer_p}>마지막 검사일자 :  
-                            {test && test.category === 'depress' ? new Date(test.testDate).toLocaleDateString() : ''}
-                            </p>
-                        <button className={styles.Profile_footer_btn} onClick={goToBlue}>보러가기</button>
-                    </div>
-                    <div className={styles.Profile_mid_content_line}></div>
-                    <div className={styles.Profile_mid_content01}>
-                        <p className={styles.Profile_mid_content_p}>스트레스 자가진단</p>
-                        <p className={styles.Profile_mid_footer_p}>마지막 검사일자 :  
-                            {test && test.category === 'stress' ? new Date(test.testDate).toLocaleDateString() : ''}</p>
-                        <button className={styles.Profile_footer_btn} onClick={goToStress}>보러가기</button>
-                    </div>
-                    <div className={styles.Profile_mid_content_line}></div>
-                    <div className={styles.Profile_mid_content01}>
-                    <p className={styles.Profile_mid_content_p}>불안 자가진단</p>
-                    <p className={styles.Profile_mid_footer_p}>마지막 검사일자 :  
-                        {test && test.category === 'unrest' ? new Date(test.testDate).toLocaleDateString() : ''}</p>
-                        <button className={styles.Profile_footer_btn} onClick={goToAnxiety}>보러가기</button>
-                    </div>
-                </div>
-            </div>
-    </div>
-  )
+              <div className={styles.ExpertprofileBox}>
+                  <div className={styles.ExpertprofileBoxUnderp}>
+                      <p>유저</p>
+                      <p>신청일</p>
+                      <p>승인</p>
+                  </div>
+
+                  <div className={styles.ExpertprofileBoxborder}></div>
+
+                  {/* 필터링 후 렌더링 */}
+                  {expertCheck.filter(item => item.userId === loggedInUserId).map(item => (
+                      <div key={item.id} className={styles.ExpertprofileBoxUnderp2}>
+                          {isLogined ? (
+                              <>
+                                  <div style={{ marginLeft: 20 }}>{item.userId}</div>
+                                  <div style={{ marginLeft: 40 }}>{item.createDate}</div>
+                                  <div className={styles.BoxUnder2State} style={{ marginRight: 30 }}>
+                                      <p>{expertCheck[item.isExpert] ='true' ? '완료' : '대기중'}</p>
+                                  </div>
+                              </>
+                          ) : (
+                              <p>로그인 정보가 없습니다.</p>
+                          )}
+                      </div>
+                  ))}
+              </div>
+          </div>
+      </div>
+  );
 }

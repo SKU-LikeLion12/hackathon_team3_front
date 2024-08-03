@@ -25,6 +25,7 @@ import CommView from './pages/Community/CommView';
 import CommTrans from './pages/Community/CommTrans';
 // 마이페이지 부분
 import Profile from "./pages/Mypage/Profile";
+import ExpertProfile from "./pages/Mypage/ExpertProfile"
 import MyComment from './pages/Mypage/MyComment';
 import MyBookmark from './pages/Mypage/MyBookmark';
 import MyPost from "./pages/Mypage/MyPost";
@@ -87,6 +88,7 @@ function App() {
           <Route path="/anxietySave" element={<PrivateRoute  component={AnxietySave}/>} />
           <Route path="/hospital_map" element={<PrivateRoute component={HospitalMap} />} /> */}
           <Route path="/member/:id" element={<Profile />} />
+          <Route path="/promember/:id" element={<ExpertProfile />} />
           <Route path="/mypost" element={<MyPost/>} /> {/* 작성한 게시글 */}
           <Route path="/mycomment" element={<MyComment/>} />{/* 작성한 댓글 */}
           <Route path="/mybookmark" element={<MyBookmark/>} />{/* 저장한 북마크 */}

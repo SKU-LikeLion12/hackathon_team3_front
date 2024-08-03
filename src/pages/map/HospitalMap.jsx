@@ -224,7 +224,7 @@ const HospitalMap = () => {
     <div className={styles.map_container}>
       {/* 왼쪽 */}
       <div className={styles.CommList_left}>
-        <h2 className={styles.CommList_left_h2}>커뮤니티</h2>
+        <h2 className={styles.CommList_left_h2}>끄적임</h2>
         <p className={styles.CommList_left_h2}>
           내 주변 병원을 검색하여
           <br />

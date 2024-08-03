@@ -60,42 +60,57 @@ export default function Login() {
 
   const no_btn = id !== '' && pw !== '';
 
-  //로그인
   const submitLogin = async () => {
     try {
       const response = await axios.post('http://52.78.131.56:8080/login', {
         userId: id,
         password: pw
       });
-
+  
       if (response.status === 200 && response.data) {
         const token = response.data;
-
+  
         // JWT 형식 확인 및 저장
         if (typeof token === 'string' && token.split('.').length === 3) {
           localStorage.setItem('memberToken', token);
           setMemberToken(token);
-
+  
           // JWT에서 사용자 ID 추출
           const decodedToken = jwtDecode(token);
           const userId = decodedToken.sub;
           localStorage.setItem('userId', userId);
-
+  
           if (saveId) {
             localStorage.setItem('savedId', id);
           } else {
             localStorage.removeItem('savedId');
           }
-
+  
           sessionStorage.setItem('isLoggedIn', 'true');
+          
+          // 이건 바로 메인 페이지로 가지는거
+          // const redirectPath = sessionStorage.getItem('redirectPath') || '/' ;
+          // sessionStorage.removeItem('redirectPath');
+          // navigate(redirectPath);
 
-          const redirectPath = sessionStorage.getItem('redirectPath') || `/member/${userId}`;
-          sessionStorage.removeItem('redirectPath');
-          navigate(redirectPath);
-        } else {
+        // 이게 마이페이지로 가는 것
+        let redirectPath;
+        if (decodedToken.role === "General") { // 일반인일 경우
+          redirectPath = `/member/${userId}`;
+        } else { // 전문가일 경우
+          redirectPath = `/promember/${userId}`;
+        }
+
+        sessionStorage.removeItem('redirectPath');
+        navigate(redirectPath); // navigate 함수 호출
+
+        }else if (token === '전문가 자격 승인 요청이 처리되지 않았습니다.') {
+          console.log('전문가 자격 승인 요청이 처리되지 않았습니다:', token);
+          alert('전문가 자격 승인 요청이 처리되지 않았습니다.');
+      } else {
           console.log('잘못된 토큰 데이터:', token);
           alert('아이디 또는 비밀번호가 잘못되었습니다.');
-        }
+      }
       }
     } catch (error) {
       if (error.response) {
@@ -107,7 +122,6 @@ export default function Login() {
       }
     }
   };
-
   // admin/login 부분(어디에 어떻게 써야 될지 사실 모르겠음)
   const adminLogin = async () => {
     try {

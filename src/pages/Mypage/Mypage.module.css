@@ -2,7 +2,7 @@
 .Profile_container{
     display: flex;
     flex-direction: column;
-    width: 85%;
+    width: 100%;
     align-items: center;
     justify-content: center;
     margin: 230px auto 80px auto;
@@ -50,13 +50,21 @@
 .Profile_top02_p1{
     font-size: 20px;
     margin: 30px 0 0 30px;
+    font-weight: bold;
 }
 
 .Profile_top02_p2{
     font-size: 12px;
-    font-weight: bold;
+    /* font-weight: bold; */
     margin-top: 10px;
     margin-left: 30px;
+}
+
+.Profile_top02_p3{
+    font-size: 15px;
+    margin: 30px 0 0 30px;
+    color: #ffd000;
+    font-weight: bold;
 }
 
 /* 젤 오른쪽 */
@@ -174,7 +182,16 @@
     flex-direction: row;
     align-items: flex-start;
     justify-content: start;
-    margin-left: 120PX;
+    margin-left: 160px;
+    margin-bottom: 30px;
+}
+
+.MyPost_toptop{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: start;
+    margin-left: 220px;
     margin-bottom: 30px;
 }
 
@@ -442,3 +459,49 @@
     margin-top: 20px;
     margin-left: 20vh;
  }
+
+ .ExpertprofileBox{
+    background-color:rgba(255, 208, 0, 0.30000001192092896);
+    height:170px;
+    width:810px;
+    border-radius:30px;
+    margin: 10px 0 10px 80px;
+    padding-bottom: 125px;
+}
+
+.ExpertprofileBoxUnderp{
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.ExpertprofileBoxborder{
+    border:0.5px solid rgba(0, 0, 0, 0.5);
+    width: 810px;
+    height: 0px;
+}
+
+.ExpertprofileBoxUnderp2{
+    font-size: 19.5px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 40px;
+    margin-left: 20px;
+    text-align: center;
+}
+
+.BoxUnder2State{
+    background-color: white;
+    width:105px;
+    height:35px;
+    border-radius: 30px;
+    text-align: center;
+}
+
+.BoxUnder2State p{
+    margin-top: 3px;
+}

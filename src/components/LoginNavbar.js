@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Fixed.module.css';
 import { useNavigate } from 'react-router-dom';
+import {jwtDecode} from 'jwt-decode';
 
 const LoginNav = () => {
   const navigate = useNavigate(); // useNavigate 훅을 통해 페이지 이동
@@ -20,7 +21,11 @@ const LoginNav = () => {
   const goToMypage = () => {
     const userId = localStorage.getItem('userId');
     if (userId) {
-      navigate(`/member/${userId}`);
+      if (role === 'Expert') {
+        navigate(`/promember/${userId}`);
+      } else {
+        navigate(`/member/${userId}`);
+      }
     } else {
       console.error('사용자 ID를 찾을 수 없습니다.');
     }
@@ -48,6 +53,27 @@ const LoginNav = () => {
     sessionStorage.removeItem('isLoggedIn');
     navigate('/login'); // 로그아웃 후 로그인 페이지로 이동
   };
+
+   //로그인 토큰 가져오기
+   const [role, setRole] = useState(null);
+
+   useEffect(() => {
+    const memberToken = localStorage.getItem('memberToken');
+    if (memberToken) {
+      try {
+        const decodedmemberToken = jwtDecode(memberToken);
+        setRole(decodedmemberToken.role);
+        setIsLogined(true);
+      } catch (error) {
+        console.error('토큰 해독 실패', error);
+        setIsLogined(false);
+      }
+    } else {
+      setIsLogined(false);
+    }
+  }, []);
+
+  
 
   return (
     <header> 

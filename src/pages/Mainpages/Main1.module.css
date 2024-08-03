@@ -20,7 +20,7 @@
     color: white;
     margin-left: 45vh;
     line-height: 130%;
-    margin-top: -35px;
+    margin-top: -10px;
 }
 
 .main2Container {
@@ -50,7 +50,7 @@
     background-color:rgba(132, 166, 127, 0.30000001192092896);
     border-radius: 30px;
     border-top-left-radius: 0px;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .main2InBox p {
@@ -118,7 +118,7 @@
     margin-top: 13px;
     margin-left: 20px;
     background: black;
-    height: 2px;
+    height: 0.8px;
     font-size: 0px;
     line-height: 0px;
 }
@@ -127,11 +127,11 @@
     display: inline-block;
     width: 13px;
     height: 13px;
-    border-left: 2px solid black;
-    border-bottom: 2px solid black;
+    border-left: 0.5px solid black;
+    border-bottom: 0.5px solid black;
     transform: rotate(-135deg);
-    margin-top: 8px;
-    margin-left: -5px;
+    margin-top: 7.5px;
+    margin-left: -12.5px;
 }
 
 .main3Box2 {
@@ -143,30 +143,23 @@
 }
 
 .main3Box2Text {
-    font-size: 25px;
+    font-size: 22px;
     line-height: 130%;
     margin-top: 30px;
     margin-left: 20px;
 }
 
 .main3Box2Text img {
-    width: 80px;
+    width: 150px;
     margin-top: -50px;
-    margin-left: 20px;
+    margin-left: 50px;
 }
 
-/* .main2Text2 {
-    display: flex;
-    justify-content: start;
-    font-size: 25px;
-    margin-top: 10px;
-    margin-left: 20px;
-} */
 
 .main2Text2 {
     display: flex;
     justify-content: start;
-    font-size: 18px;
+    font-size: 22px;
     margin-top: 10px;
     margin-left: 20px;
 }
@@ -174,10 +167,10 @@
 .line2 {
     content: "";
     width: 20vh;
-    margin-top: 20px;
+    margin-top: 17px;
     margin-left: 20px;
     background: black;
-    height: 2px;
+    height: 0.3px;
     font-size: 0px;
     line-height: 0px;
 }
@@ -186,9 +179,9 @@
     display: inline-block;
     width: 13px;
     height: 13px;
-    border-left: 2px solid black;
-    border-bottom: 2px solid black;
+    border-left: 0.5px solid black;
+    border-bottom: 0.5px solid black;
     transform: rotate(-135deg);
-    margin-top: 15px;
-    margin-left: -5px;
+    margin-top: 11px;
+    margin-left: -11px;
 }

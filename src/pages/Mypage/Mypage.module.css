@@ -106,7 +106,7 @@
     width:810px;
     border-radius:30px;
     margin: 10px 0 10px 80px;
-    padding: 0 40px;
+    padding: 15px 40px 0  40px;
 }
 
 /* 안에 내용 */
@@ -114,6 +114,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-between;
 }
 
 .Profile_mid_content_p{
@@ -137,18 +138,20 @@
     width:810px;
     border-radius:30px;
     margin: 10px 0 10px 80px;
-    padding: 0 40px;
+    padding: 10px 40px;
 }
 
 .Profile_mid_footer_p{
     font-size: 9px;
     color:#414141;
+    margin-top: 3px;
 }
 
 .Profile_footer_btn{
     background-color:#ffffff;
     border : 1px solid #ffffff;
     border-radius:15px;
+    margin-top: -10px;
 }
 
 /* ===================================================== */

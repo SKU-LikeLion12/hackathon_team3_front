@@ -17,6 +17,7 @@ export default function CommList(props) {
   useEffect(() => {
     const loggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
     setIsLogined(loggedIn);
+    
   }, []);
 
   const handleLoginClick = () => {

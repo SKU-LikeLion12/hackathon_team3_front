@@ -5,6 +5,7 @@ import styles2 from './Mypage.module.css'; // 마이페이지에서 가져온 �
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import {jwtDecode} from 'jwt-decode'; // 수정된 부분
+import Profile from './Profile';
 
 export default function MyPost() {
   const [isLogined, setIsLogined] = useState(false);
@@ -24,7 +25,7 @@ export default function MyPost() {
         const decodedmemberToken = jwtDecode(memberToken);
         setRole(decodedmemberToken.role);
         setIsLogined(true); // 로그인 상태 업데이트
-        console.log(',너는 뭐야',decodedmemberToken.role)
+        console.log('너는 뭐야',decodedmemberToken.role)
       } catch (error) {
         console.error('토큰 해독 실패', error);
         setIsLogined(false);
@@ -43,6 +44,7 @@ export default function MyPost() {
         }
       });
       setmypost(response.data);
+      console.log(response.data)
     } catch (error) {
       console.error('데이터를 불러오는데 실패했습니다', error);
       alert('데이터를 불러오지 못했습니다.');

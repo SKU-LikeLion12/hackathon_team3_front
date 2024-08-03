@@ -27,7 +27,7 @@ const BlueSave = () => {
             Authorization: `Bearer ${memberToken}`
           }
         });
-        setShow(response.data[0]); 
+        setShow(response.data[2]); 
         console.log(response.data);
       } catch (err) {
         setError(err);
@@ -50,13 +50,13 @@ const BlueSave = () => {
 
             <p className={styles2.BlueSave_top_p}>
                 <span className={styles2.BlueSaveblue}>불안</span>
-                <span className={styles2.BlueSaveDate}>마지막 검사일자: yyyy-mm-dd</span>
+                <span className={styles2.BlueSaveDate}>마지막 검사일자: {show ? new Date(show.testDate).toLocaleDateString() : '검사 내역이 없습니다.'}</span>
             </p>  
             
             </div>
 
             <div className={styles2.Profile_top02}>
-            <p className={styles2.Profile_top02_p1} style={{marginLeft: -30}}>3팀 가보자고(@babyLion)</p>
+            <p className={styles2.Profile_top02_p1} style={{marginLeft: -30}}>{show ? show.tester : ''}</p>
             </div>
         </div>
 

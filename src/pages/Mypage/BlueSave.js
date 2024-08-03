@@ -52,7 +52,7 @@ const BlueSave = () => {
           </p>
         </div>
         <div className={styles2.Profile_top02}>
-          <p className={styles2.Profile_top02_p1} style={{ marginLeft: -30 }}>{show ? show.tester : '사용자 이름'}</p>
+          <p className={styles2.Profile_top02_p1} style={{ marginLeft: -30 }}>{show ? show.tester : ''}</p>
         </div>
       </div>
 

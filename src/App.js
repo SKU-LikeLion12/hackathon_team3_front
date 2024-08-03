@@ -47,7 +47,6 @@ import Manager from './pages/manager/Manager';
 import 'pretendard/dist/web/static/pretendard.css';
 
 
-
 function App() {
 
   const location = useLocation();

@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState , useContext } from 'react';
 import styles from './Mypage.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
-import BlueSave from './BlueSave';
+import UseProfileContext from './UseProfileContext'
 
 export default function Profile() {
+
+    const  {fetchmypost,  post , 
+        fetchmycomment , coment , 
+        bookMark, fetchmybookmark,
+        test, getTestResult} = UseProfileContext()
+
     //링크 이동
     const navigate = useNavigate();
     const goToBlue = () => {navigate('/blueSave');};
-    const goToStress = () => {navigate('/StressSave');};
+    const goToStress = () => {navigate('/stressSave');};
     const goToAnxiety = () => {navigate('/anxietySave');};
     const goToPost = () => {navigate('/mypost');};
     const goToComment = () => {navigate('/mycomment');};
@@ -46,7 +52,17 @@ export default function Profile() {
     useEffect(() => {
         const loggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
         setIsLogined(loggedIn);
+        fetchmypost();
+        fetchmycomment();
+        fetchmybookmark();
+        getTestResult();
+        //이미지가 있을 시 화면에 보여주기 위함 
+        const savedImg = localStorage.getItem('profileImg');
+        if (savedImg) {
+    setImg(savedImg);
+    } 
     }, []);
+
     
     useEffect(() => {
         const memberToken = localStorage.getItem('memberToken');
@@ -71,9 +87,64 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+//   ========================================================================
+
   //프로필 사진 업로드 해보기
   const [img , setImg] = useState("../img/profile.jpg")
+  const imgUpload = useRef(null) //렌더링과 상관없이 저장할 때 유용하게 쓰인대
 
+  const onChange = (e) => {
+    if (e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const imgData = reader.result;
+        setImg(imgData);
+        localStorage.setItem('profileImg', imgData); //로컬에 이미지 저장하기
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    } else {
+      const defaultImg = '../img/profile.jpg';
+      setImg(defaultImg);
+      localStorage.removeItem('profileImg');
+    }
+  };
+
+// =============================================================================
+
+//닉네임 변경부분
+const [nickInput, setNickInput] = useState(false); //닉네임 입력부분
+const [nickName, setNickName] = useState('');
+
+    //닉네임 입력
+    const handleInputChange = (e) => {
+        setNickName(e.target.value);
+    };
+
+    //닉네임 입력 부분 true로
+    const changeNick = () => {
+        setNickInput(true);
+    };
+
+    //닉네임 수정
+    const handleSave = async () => {
+        try {
+            await axios.put('http://52.78.131.56:8080/member/changeName', {
+                token: localStorage.getItem('memberToken'),
+                nickname: nickName
+            });
+            alert('닉네임 수정이 성공적으로 변경되었습니다.');
+            console.log('닉네임 수정이 성공적으로 변경됨')
+            window.location.reload()
+            setNickInput(false); 
+        } catch (error) {
+            console.error('데이터를 전송하는데 실패했습니다', error);
+            alert('닉네임 변경에 실패했습니다. 다시 시도해주세요.');
+        }
+    };
+
+    
+
+// =============================================================================
   const fetchProfile = async (id) => {
     const memberToken = localStorage.getItem('memberToken');
     if (!id) {
@@ -117,17 +188,41 @@ export default function Profile() {
             <div className={styles.Profile_top}>
                 {/* 젤 왼쪽 */}
                 <div className={styles.Profile_top01}>
+                    <input 
+                        type='file' 
+                        style={{ display: 'none' }}
+                        accept='image/jpg,image/png,image/jpeg'
+                        name='profile_img'
+                        onChange={onChange}
+                        ref={imgUpload} 
+                    />
                     <img className={styles.Profile_img} src={img} alt='' />
-                    <label htmlFor="fileUpload" className={styles.Profile_top01_p}>
+                    <label 
+                        onClick={() => imgUpload.current.click()}
+                        className={styles.Profile_top01_p}>
                         프로필 사진 변경하기
-                        <input id="fileUpload" type="file" accept=".jpg, .jpeg, .png" />
                     </label>
                 </div>
 
                 {/* 중간 부분 */}
                 <div className={styles.Profile_top02}>
                     <p className={styles.Profile_top02_p1}>{profile.nickname}</p>
-                    <p className={styles.Profile_top02_p2}>닉네임 변경하기</p>
+                    <div>
+            {!nickInput ? (
+                <p className={styles.Profile_top02_p2} onClick={changeNick}>닉네임 변경하기</p>
+            ) : (
+                <div>
+                    <input
+                        type="text"
+                        value={nickName}
+                        onChange={handleInputChange}
+                        placeholder="새 닉네임 입력"
+                        style ={{borderRadius:'30px'}}
+                    />
+                    <button onClick={handleSave} className={styles.Profile_footer_btn}>수정</button>
+                </div>
+            )}
+        </div>
                 </div>
 
                  {/* 젤 오른쪽 */}
@@ -157,19 +252,26 @@ export default function Profile() {
                  <div className={styles.Profile_mid_content}>
                     <div className={styles.Profile_mid_content01} onClick={goToPost}>
                         <p className={styles.Profile_mid_content_p}>작성한 게시글</p>
-                        <p>{profile.length}개</p>
+                        <p>
+                            {/* {profile.length} */}
+                            {post.length}
+                            개</p>
                     </div>
 
                     <div className={styles.Profile_mid_content_line}></div>
                     <div className={styles.Profile_mid_content01} onClick={goToComment}>
                         <p className={styles.Profile_mid_content_p}>댓글단 게시글</p>
-                        <p>0개</p>
+                        <p>
+                        {coment.length}
+                            개</p>
                     </div>
 
                     <div className={styles.Profile_mid_content_line}></div>
                     <div className={styles.Profile_mid_content01} onClick={goToBookmark}>
                     <p className={styles.Profile_mid_content_p}>북마크 게시글</p>
-                    <p>0개</p>
+                    <p>
+                        {bookMark.length}
+                        개</p>
                     </div>
                 </div>
             </div>
@@ -182,19 +284,23 @@ export default function Profile() {
                 <div className={styles.Profile_footer_content}>
                     <div className={styles.Profile_mid_content01}>
                         <p className={styles.Profile_mid_content_p}>우울증 자가진단</p>
-                        <p className={styles.Profile_mid_footer_p}>마지막 검사일자: YYYY - MM - DD</p>
+                        <p className={styles.Profile_mid_footer_p}>마지막 검사일자 :  
+                            {test && test.category === 'depress' ? new Date(test.testDate).toLocaleDateString() : ''}
+                            </p>
                         <button className={styles.Profile_footer_btn} onClick={goToBlue}>보러가기</button>
                     </div>
                     <div className={styles.Profile_mid_content_line}></div>
                     <div className={styles.Profile_mid_content01}>
                         <p className={styles.Profile_mid_content_p}>스트레스 자가진단</p>
-                        <p className={styles.Profile_mid_footer_p}>마지막 검사일자: YYYY - MM - DD</p>
+                        <p className={styles.Profile_mid_footer_p}>마지막 검사일자 :  
+                            {test && test.category === 'stress' ? new Date(test.testDate).toLocaleDateString() : ''}</p>
                         <button className={styles.Profile_footer_btn} onClick={goToStress}>보러가기</button>
                     </div>
                     <div className={styles.Profile_mid_content_line}></div>
                     <div className={styles.Profile_mid_content01}>
                     <p className={styles.Profile_mid_content_p}>불안 자가진단</p>
-                    <p className={styles.Profile_mid_footer_p}>마지막 검사일자: YYYY - MM - DD</p>
+                    <p className={styles.Profile_mid_footer_p}>마지막 검사일자 :  
+                        {test && test.category === 'unrest' ? new Date(test.testDate).toLocaleDateString() : ''}</p>
                         <button className={styles.Profile_footer_btn} onClick={goToAnxiety}>보러가기</button>
                     </div>
                 </div>

@@ -45,6 +45,23 @@ export default function ProCommWrite() {
     setContent(e.target.value);
   };
 
+  //엔터 이번트 추가
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter') {
+        handleSubmit();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [title,
+    content,category] );
+
+
   const handleSubmit = async () => {
     if (role == 'Expert') {
       console.error('일반인 회원이 아닙니다');

@@ -122,6 +122,22 @@ export default function Login() {
       }
     }
   };
+
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter') {
+        submitLogin();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [id, pw, saveId]);
+
   // admin/login 부분(어디에 어떻게 써야 될지 사실 모르겠음)
   const adminLogin = async () => {
     try {

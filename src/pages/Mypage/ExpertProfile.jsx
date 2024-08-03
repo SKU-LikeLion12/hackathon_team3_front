@@ -236,7 +236,20 @@ const [nickName, setNickName] = useState('');
         }
     };
 
-    
+       //엔터 이번트 추가
+        useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter') {
+        handleSave();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [nickName] );
 
 // =============================================================================
 

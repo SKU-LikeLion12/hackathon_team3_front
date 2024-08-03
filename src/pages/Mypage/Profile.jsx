@@ -112,6 +112,8 @@ export default function Profile() {
 
 // =============================================================================
 
+
+
 //닉네임 변경부분
 const [nickInput, setNickInput] = useState(false); //닉네임 입력부분
 const [nickName, setNickName] = useState('');
@@ -143,7 +145,20 @@ const [nickName, setNickName] = useState('');
         }
     };
 
-    
+     //엔터 이번트 추가
+ useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter') {
+        handleSave();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [nickName] );
 
 // =============================================================================
   const fetchProfile = async (id) => {

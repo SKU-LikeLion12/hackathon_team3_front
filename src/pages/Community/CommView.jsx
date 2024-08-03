@@ -97,7 +97,22 @@ useEffect(() => {
     };
     getPost();
   }, [id]);
+
+     //엔터 이번트 추가
+     useEffect(() => {
+      const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+          handleComent();
+        }
+      };
   
+      window.addEventListener('keydown', handleKeyDown);
+  
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }, [content] );
+
   // ====================================================================
 
   //댓글 보기
@@ -136,7 +151,7 @@ useEffect(() => {
   }
 
   // =======================================================================================
-  
+
   // 댓글 달기
   const handleComent = async () => {
     
@@ -173,6 +188,7 @@ useEffect(() => {
     }
   }
 
+  
   // =======================================================================================
 
   // 게시글 삭제

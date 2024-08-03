@@ -63,6 +63,22 @@ const handleLoginClick = () => {
     setContent(e.target.value);
   };
 
+   //엔터 이번트 추가
+   useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter') {
+        handleSubmit();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [title,
+    content] );
+
   //작성한 부분
   const handleSubmit = async () => {
     if (role !== 'Expert') {

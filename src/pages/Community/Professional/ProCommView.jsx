@@ -160,7 +160,7 @@ useEffect(() => {
 // 게시글 수정
 const handleEdit = () => {
  
-  if (post.writer === loginId) {
+  if (post.writerId === loginId) {
     navigate(`/pro_comm_trans/${post.id}`);
   } else {
     alert('수정 권한이 없습니다.');
@@ -170,8 +170,7 @@ const handleEdit = () => {
 // 게시글 삭제
 const postDelete = async () => {
   
-
-  if (post.writer === loginId) {
+  if (post.writerId === loginId) {
     try {
       await axios.delete(`http://52.78.131.56:8080/expert/post/${post.id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('memberToken')}` },

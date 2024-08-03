@@ -1,7 +1,8 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import styles2 from './Mypage.module.css'; // 마이페이지에서 가져온 스타일
 import { useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
+import StressTemp from '../selftest/stress/StressTemp'
 
 const BlueSave = () => {
   const Navigate=useNavigate();
@@ -10,6 +11,32 @@ const BlueSave = () => {
     Navigate('/StressTest')
   }
   
+  const [show, setShow] = useState(null); // 테스트 결과를 가져와서 담을 공간
+  const [error, setError] = useState(null); // 에러시
+  const [sum, setSum] = useState(0);
+  const [user , setUser] =useState(null); //유저 정보 가져오기
+
+  useEffect(() => {
+    const memberToken = localStorage.getItem('memberToken');
+    console.log(memberToken);
+
+    const getTestResult = async () => {
+      try {
+        const response = await axios.get('http://52.78.131.56:8080/test/result', {
+          headers: {
+            Authorization: `Bearer ${memberToken}`
+          }
+        });
+        setShow(response.data[0]); 
+        console.log(response.data);
+      } catch (err) {
+        setError(err);
+      }
+    };
+    getTestResult();
+  }, []);
+
+
   return (
     <div className={styles2.MyPost}>
       
@@ -33,19 +60,28 @@ const BlueSave = () => {
             </div>
         </div>
 
-        {/* 글작성이 없을 때 */}
-        <div className={styles2.postList}>
-            <div className={styles2.No_postList}>
-                <p><span>유저</span>님이 자가진단 결과의 저장내역이 없습니다. <br/>
-                혹시 마음이 고장난 게 느껴진다면 <br/>
-                검사를 통하여 내 마음을 들여다 볼 수 있습니다.🍃
-                </p>        
-            </div>
+        {show &&
+          <div className={styles2.resultContainer2}>
+           <StressTemp sum={sum} />
+           <button className={styles2.inspectBut00} onClick={goTostress}>검사하러 가기</button>
+          </div>
+        }
+
+    {!show && (
+      <>
+        <div className={styles2.postList00}>
+          <p>
+            <span>유저</span>님이 자가진단 결과의 저장내역이 없습니다. <br />
+            혹시 마음이 고장난 게 느껴진다면 <br />
+            검사를 통하여 내 마음을 들여다 볼 수 있습니다.🍃
+          </p>
         </div>
-    
-        <div onClick={goTostress}>
-            <button className={styles2.inspectBut}>검사하러 가기</button>
+        <div onClick={goTostress} className={styles2.inspect}>
+          <button className={styles2.inspectBut}>검사하러 가기</button>
         </div>
+      </>
+    )}
+
     </div>
   )
 }

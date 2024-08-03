@@ -49,7 +49,6 @@ useEffect(() => {
       setIsLogined(true); // 로그인 상태 업데이트
       setLoginId (decodedmemberToken.sub) //현재 로그인한 아이디
       console.log('현재 로그인한 아이디 : ', decodedmemberToken.sub)
-      console.log('현재 로그인 정보 : ', decodedmemberToken)
     } catch (error) {
       console.error('토큰 해독 실패', error);
       setIsLogined(false);
@@ -87,7 +86,7 @@ useEffect(() => {
         };
 
         const transCategoryKey = categoryKeyResult[postData.category] || 'unknown';
-        console.log('작성한 닉네임:' , postData.writer) 
+        console.log('작성한 아이디:' , postData.writerId) 
         console.log(postData)       
         setPost({ ...postData, category: transCategoryKey });
       } catch (error) {
@@ -178,7 +177,7 @@ useEffect(() => {
 
   // 게시글 삭제
   const postDelete = async () => {
-    if (loginId === post.writer) {
+    if (loginId === post.writerId) {
       try {
         await axios.delete(`http://52.78.131.56:8080/general/post/${id}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('memberToken')}` },
@@ -198,7 +197,7 @@ useEffect(() => {
 
 // 게시글 수정
 const handleEdit = () => {
-  if (loginId === post.writer) {
+  if (loginId === post.writerId) {
     navigate(`/comm_trans/${post.id}`); 
   } else {
     alert('수정 권한이 없습니다.');

@@ -3,6 +3,7 @@ import styles from './Mypage.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
+import BlueSave from './BlueSave';
 
 export default function Profile() {
     //링크 이동
@@ -70,6 +71,8 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  //프로필 사진 업로드 해보기
+  const [img , setImg] = useState("../img/profile.jpg")
 
   const fetchProfile = async (id) => {
     const memberToken = localStorage.getItem('memberToken');
@@ -114,7 +117,7 @@ export default function Profile() {
             <div className={styles.Profile_top}>
                 {/* 젤 왼쪽 */}
                 <div className={styles.Profile_top01}>
-                    <img className={styles.Profile_img} src='../img/profile.jpg' alt='' />
+                    <img className={styles.Profile_img} src={img} alt='' />
                     <label htmlFor="fileUpload" className={styles.Profile_top01_p}>
                         프로필 사진 변경하기
                         <input id="fileUpload" type="file" accept=".jpg, .jpeg, .png" />

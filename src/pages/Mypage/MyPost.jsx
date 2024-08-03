@@ -24,6 +24,7 @@ export default function MyPost() {
         const decodedmemberToken = jwtDecode(memberToken);
         setRole(decodedmemberToken.role);
         setIsLogined(true); // 로그인 상태 업데이트
+        console.log(',너는 뭐야',decodedmemberToken.role)
       } catch (error) {
         console.error('토큰 해독 실패', error);
         setIsLogined(false);
@@ -78,7 +79,7 @@ export default function MyPost() {
           mypost.map((mypost, i) => (
             <Link 
               key={mypost.id} 
-              to={role === 'EXPERT' ? `/pro_comm_view/${mypost.id}` : `/comm_view/${mypost.id}`} 
+              to={role === 'Expert' ? `/pro_comm_view/${mypost.id}` : `/comm_view/${mypost.id}`} 
               className={styles.CommList_main}
             >
               <div className={styles2.List} style={{ display:'flex'}}>

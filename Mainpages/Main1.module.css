@@ -4,45 +4,42 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: flex-start;
-    width: 120vh;
-    padding-left: 80px;
+    justify-content: center;
+    /* width: 1000px; */
 }
 
 .왼쪽끄적임{
-    font-size: 23px;
+    font-size: 20px;
     color: white;
-    margin-bottom: 40px;
-    margin-top: 20px;
+    margin-top: 90px;
     /* padding-top: 10px; */
     font-weight: bold;
     text-align: left;
 }
 
 .끄적임밑{
-    font-size: 40px;
+    font-size: 50px;
     color: white;
     text-align: left;
-    padding: 0%;
+    padding: 0;
     margin-bottom: -10px;
 }
 
-/* .mainText {
-    font-size: 30px;
+.끄적임밑2{
+    font-size: 50px;
     color: white;
-    margin-left: 45vh;
-    line-height: 130%;
-    margin-top: -10px;
-} */
+    text-align: left;
+    padding: 0;
+    margin-bottom: 60px;
+}
 
-.mainText{
+
+.클로버그림컨테이너{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 50vh;
-    margin-right: 200px;
-    margin-bottom: -60px;
+    margin-bottom: 190px;
 }
 
 .오른쪽끄적임{
@@ -50,18 +47,20 @@
     font-size: 100px;
     text-align: left;
     font-weight: bold;
+    margin-left: 40px;
 }
 
 .클로버그림{
     display: flex;
     flex-direction: row;
-    margin : 0 0 -30px 250px;
+    justify-content: flex-end;
+    align-items: flex-end;
 }
 
 
 .main2Container {
     box-sizing: border-box;
-    width: 170vh;
+    width: 1200px;
     margin : 150px auto 0 auto;
     padding: auto;
 }
@@ -80,9 +79,8 @@
 
 .main2InBox {
     margin-top: 40px;
-    margin-left: 10px;
     box-sizing: border-box;
-    width: 90%;
+    width: 1190px;
     height: 50px;
     background-color:rgba(132, 166, 127, 0.30000001192092896);
     border-radius: 30px;
@@ -95,29 +93,29 @@
     padding-left: 40px;
 }
 
-/* .main3Container {
+.main3Container {
     color: black;
     display: flex;
     justify-content: space-around;
     margin-top: 70px;
     margin-left: -100px;
-} */
+}
 
 .main3Container {
     color: black;
     display: flex;
-    width: 170vh;
+    width: 1200px;
     justify-content: space-around;
     margin: 70px auto 0 auto;
 }
 
 .main3Box1 {
     background-color:#f9ecb1;
-    width: 115vh;
+    width: 800px;
     height: 170px;
     border-radius: 10px;
     cursor: pointer;
-    margin-right: 50px;
+     margin-right: 50px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -173,7 +171,7 @@
 
 .line2 {
     content: "";
-    width: 20vh;
+    width: 170px;
     margin-top: 17px;
     margin-left: 20px;
     background: black;
@@ -191,19 +189,9 @@
     transform: rotate(-135deg);
     margin-top: 11px;
     margin-left: -11px;
-}
+} 
 
-.go{
-    font-size: 11px;
-    margin-left: 73.5vh;
-    margin-top: -15px;
-}
 
-.go2{
-    font-size: 11px;
-    margin-left: 325px;
-    margin-top: 5px;
-}
 
 /* ============================================================== */
 
@@ -217,7 +205,7 @@
 }
 
 .mainBox {
-    width: 170vh;
+    width: 1200px;
     height: 250px;
     background-color:#84a67f;
     border-radius: 20px;
@@ -225,8 +213,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
-    padding: 0 0 40px 0;
+    /* justify-content: space-between; */
+    padding: 0 0 40px 40px;
 }
 
 .오늘끄적임{
@@ -239,21 +227,21 @@
 }
 
 .바닥부분{
-    width: 170vh;
+    width: 1190px;
     height: 250px;
-    margin: 20px auto 0 auto;
+    margin-top: 20px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
-    padding: 0 0 40px 0;
+    justify-content: space-between;
+    padding: auto;
 }
 
 .유저님의마음을{
     display: flex;
     flex-direction: column;
     font-size: 26px;
-    margin-top: 20px;
+    margin-top: 40px;
     font-weight: 500;
     color:#4d4d4d;
 }
@@ -263,6 +251,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin-bottom: 20px;
+    margin-top: -10px;
     /* justify-content: space-between; */
 }
 
@@ -296,7 +286,7 @@
 
 .main3Box2 {
     background-color:#ffea8f;
-    width: 47vh;
+    width: 350px;
     height: 170px;
     border-radius: 10px;
     cursor: pointer;
@@ -315,10 +305,10 @@
 .main2Text2 {
     display: flex;
     flex-direction: column;
-    padding-left: 44px;
+    /* padding-left: 44px; */
     margin-top: -5px;
-    justify-content: center;
-    width: 47vh;
+    justify-content: flex-start;
+    width: 350px;
     align-items: flex-start;
   }
   
@@ -326,9 +316,9 @@
     display: flex;
     flex-direction: row;
     align-items: flex-end;
-    justify-content: space-evenly;
+    justify-content: flex-start;
     padding-top: 20px;
-    width: 47vh;
+    width: 350px;
     /* padding-left: 44px; */
   }
 
@@ -336,4 +326,5 @@
     display: flex;
     flex-direction: row;
     margin-top: -5px;
+    margin-bottom: 30px;
 }

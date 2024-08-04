@@ -23,3 +23,13 @@ yarn-debug.log*
 yarn-error.log*
 
 기록용.txt
+
+/public
+
+/src
+
+/00
+
+/01
+
+package-lock.json

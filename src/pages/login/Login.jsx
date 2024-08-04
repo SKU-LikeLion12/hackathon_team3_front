@@ -17,6 +17,21 @@ export default function Login() {
   const [showPw, handlePw] = usePWContext();
   const navigate = useNavigate();
 
+  //엔터키 이벤트 추가
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter') {
+        submitLogin();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [id, pw, saveId]);
+
   useEffect(() => {
     const savedId = localStorage.getItem('savedId');
     if (savedId) {
@@ -75,9 +90,10 @@ export default function Login() {
           localStorage.setItem('memberToken', token);
           setMemberToken(token);
   
-          // JWT에서 사용자 ID 추출
+          // JWT에서 사용자 정보 추출
           const decodedToken = jwtDecode(token);
           const userId = decodedToken.sub;
+          const role = decodedToken.role;
           localStorage.setItem('userId', userId);
   
           if (saveId) {
@@ -87,30 +103,18 @@ export default function Login() {
           }
   
           sessionStorage.setItem('isLoggedIn', 'true');
-          
-          // 이건 바로 메인 페이지로 가지는거
-          // const redirectPath = sessionStorage.getItem('redirectPath') || '/' ;
-          // sessionStorage.removeItem('redirectPath');
-          // navigate(redirectPath);
-
-        // 이게 마이페이지로 가는 것
-        let redirectPath;
-        if (decodedToken.role === "General") { // 일반인일 경우
-          redirectPath = `/member/${userId}`;
-        } else { // 전문가일 경우
-          redirectPath = `/promember/${userId}`;
-        }
-
-        sessionStorage.removeItem('redirectPath');
-        navigate(redirectPath); // navigate 함수 호출
-
-        }else if (token === '전문가 자격 승인 요청이 처리되지 않았습니다.') {
+  
+          // 역할에 따라 리다이렉트 경로 설정
+          const redirectPath = sessionStorage.getItem('redirectPath') || (role === 'Expert' ? `/promember/${userId}` : `/member/${userId}`);
+          sessionStorage.removeItem('redirectPath');
+          navigate(redirectPath);
+        } else if (token === '전문가 자격 승인 요청이 처리되지 않았습니다.') {
           console.log('전문가 자격 승인 요청이 처리되지 않았습니다:', token);
           alert('전문가 자격 승인 요청이 처리되지 않았습니다.');
-      } else {
+        } else {
           console.log('잘못된 토큰 데이터:', token);
           alert('아이디 또는 비밀번호가 잘못되었습니다.');
-      }
+        }
       }
     } catch (error) {
       if (error.response) {
@@ -122,21 +126,6 @@ export default function Login() {
       }
     }
   };
-
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Enter') {
-        submitLogin();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [id, pw, saveId]);
 
   // admin/login 부분(어디에 어떻게 써야 될지 사실 모르겠음)
   const adminLogin = async () => {

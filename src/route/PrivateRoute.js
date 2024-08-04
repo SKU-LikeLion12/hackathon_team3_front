@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const PrivateRoute = ({ component: Component }) => {
   const [isLogined, setIsLogined] = useState(false);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  const showLoginAlert = () => {
+    alert('로그인이 필요한 서비스입니다.');
+    navigate('/login');
+  };
 
   useEffect(() => {
-    // 로그인 상태 확인 로직
     const checkLoginStatus = () => {
       const loggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
       setIsLogined(loggedIn);
@@ -14,13 +19,13 @@ const PrivateRoute = ({ component: Component }) => {
     };
 
     checkLoginStatus();
-  }, []);
+  }, [isLogined]);
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  return isLogined ? <Component /> : <Navigate to='/login' />;
+  return isLogined ? <Component /> : showLoginAlert();
 };
 
 export default PrivateRoute;

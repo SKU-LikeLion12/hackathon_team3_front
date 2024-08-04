@@ -73,7 +73,9 @@ export default function UseProfileContext() {
       //   ========================================================================================
       //진단 결과 보기
 
-      const [test , setTest] =useState([])
+      const [test , setTest] =useState([]) //우울
+      const [test02 , setTest02] =useState([]) //스트레스
+      const [test03 , setTest03] =useState([]) //불안
 
       const getTestResult = async () => {
         const memberToken = localStorage.getItem('memberToken');
@@ -83,8 +85,10 @@ export default function UseProfileContext() {
               Authorization: `Bearer ${memberToken}`
             }
           });
-          setTest(response.data[0]); 
-          console.log('자가진단 카테고리',response.data);
+          setTest(response.data[0]);
+          setTest02(response.data[1]);
+          setTest03(response.data[2]); 
+          console.log('자가진단 카테고리',response.data[1]);
         } catch (err) {
         }
       };
@@ -95,7 +99,7 @@ export default function UseProfileContext() {
   return {fetchmypost , post,
     fetchmycomment ,coment,
     bookMark, fetchmybookmark,
-    test, getTestResult
+    test, getTestResult , test02 , test03
     }
     
   }

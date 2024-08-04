@@ -7,7 +7,16 @@ const LoginNav = () => {
   const navigate = useNavigate(); // useNavigate 훅을 통해 페이지 이동
 
   const goToBlue = () => {
-    navigate('/blue');
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      if (role === 'Expert') {
+        alert('전문가는 자가진단을 이용할 수 없습니다.')
+      } else {
+        navigate('/blue');
+      }
+    } else {
+      console.error('사용자 ID를 찾을 수 없습니다.');
+    }
   };
 
   const goToMain = () => {

@@ -136,7 +136,7 @@ useEffect(() => {
   // 댓글 달기
   const handleComent = async () => {
 
-    if (role == 'Expert') {
+    if (role == 'EXPERT') {
       console.log('전문가 회원이다.');
       try {
         console.log(`내용 : ${content}`);

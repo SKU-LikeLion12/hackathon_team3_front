@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import {BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, useLocation} from 'react-router-dom';
 //메인 페이지
 import Main1 from './pages/Mainpages/Main1';
 import Navbar from './components/Navbar';
@@ -44,7 +44,7 @@ import AnxietyResult from './pages/selftest/anxiety/AnxietyResult';
 import Manager from './pages/manager/Manager';
 
 //로그인 여부 확인 후 url 경로 변경
-// import PrivateRoute from './route/PrivateRoute';
+import PrivateRoute from './route/PrivateRoute';
 import 'pretendard/dist/web/static/pretendard.css';
 
 
@@ -53,7 +53,7 @@ function App() {
   const location = useLocation();
 
   // 로그인하기 전 페이지들
-  const authPages = ['/login', '/firstsignup', '/signup', '/findPw', '/pro_signup'];
+  const authPages = ['/login', '/firstsignup', '/signup', '/findPw', '/pro_signup', '/'];
 
   // 현재 페이지가 로그인한건지 아닌지 
   const showNavbar = authPages.includes(location.pathname);
@@ -81,12 +81,11 @@ function App() {
           <Route path="/pro_comm_trans/:id" element={<ProCommTrans />} /> {/* 게시글 수정 */}
           <Route path="/pro_comm_write" element={<ProCommWrite />} />
           {/* 마이페이지 */}
-          {/* <Route path="/profile/:userId" element={<PrivateRoute  component={Profile}/>} />
-          <Route path="/mypost" element={<PrivateRoute  component={MyPost}/>} />
+           {/* <Route path="/mypost" element={<PrivateRoute  component={MyPost}/>} />
           <Route path="/blueSave" element={<PrivateRoute  component={BlueSave}/>} />
           <Route path="/stressSave" element={<PrivateRoute  component={StressSave}/>} />
-          <Route path="/anxietySave" element={<PrivateRoute  component={AnxietySave}/>} />
-          <Route path="/hospital_map" element={<PrivateRoute component={HospitalMap} />} /> */}
+          <Route path="/anxietySave" element={<PrivateRoute  component={AnxietySave}/>} /> */}
+          <Route path="/hospital_map" element={<PrivateRoute component={HospitalMap} />} />
           <Route path="/member/:id" element={<Profile />} />
           <Route path="/promember/:id" element={<ExpertProfile />} />
           <Route path="/mypost" element={<MyPost/>} /> {/* 작성한 게시글 */}
@@ -108,6 +107,7 @@ function App() {
           <Route path='/AnxietyResult' element={<AnxietyResult />} />
           {/* 관리자 페이지 */}
           <Route path='/' element={<Main1 />} />
+
           <Route path='/manager' element={<Manager />} />
           
           

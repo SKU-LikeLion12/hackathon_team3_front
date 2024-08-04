@@ -74,12 +74,14 @@ footer .inner1 {
     max-width: var(--layout-max-width);
     width: 100%;
     margin: 0 auto;
-    padding: 10px 60px;
+    padding: 20px 60px;
     color:#84a67f;
     position: absolute;
     bottom: auto;
     border-top: solid 1px gray;
-    margin-top: 50px;
+    margin-top: 90px;
+    font-size: 15px;
+    padding-top: 10px;
 }
 
 footer .inner2{
@@ -88,11 +90,12 @@ footer .inner2{
     max-width: var(--layout-max-width);
     width: 100%;
     margin: 0 auto;
-    padding: 10px 60px;
+    padding: 0px 60px;
     color: #676358;
     position: absolute;
     bottom: auto;
-    margin-top: 80px;
+    margin-top: 130px;
+    font-size: 13px;
 }
 
 footer .inner3{
@@ -101,11 +104,11 @@ footer .inner3{
     max-width: var(--layout-max-width);
     width: 100%;
     margin: 0 auto;
-    padding: 10px 60px;
+    padding: 0px 60px;
     color: #676358;
     position: absolute;
     bottom: auto;
-    margin-top: 115px;
+    margin-top: 160px;
 }
 
 footer .inner3 p{

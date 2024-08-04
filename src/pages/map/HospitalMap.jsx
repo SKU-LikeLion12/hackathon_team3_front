@@ -220,6 +220,15 @@ const HospitalMap = () => {
     }
   };
 
+  //로그인 유지
+  const [isLogined, setIsLogined] = useState(false);
+
+  useEffect(() => {
+    const loggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+    setIsLogined(loggedIn);
+  }, []);
+
+
   return (
     <div className={styles.map_container}>
       {/* 왼쪽 */}

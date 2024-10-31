@@ -67,7 +67,7 @@
 
 <div style="text-align: center;">
 
-| [ME]김남빈 <a href="https://github.com/kimnambin"> <img style="width: 16px; height: 16px; margin-right: 20px;" alt="깃허브" src="https://cdn-icons-png.flaticon.com/512/25/25231.png"></a> | 김범준 <a href="https://github.com/beom-jun"> <img style="width: 16px; height: 16px; margin-right: 20px;" alt="깃허브" src="https://cdn-icons-png.flaticon.com/512/25/25231.png"></a> | 오한솔 <a href="https://github.com/ohansoln"> <img style="width: 16px; height: 16px; margin-right: 20px;" alt="깃허브" src="https://cdn-icons-png.flaticon.com/512/25/25231.png"></a> | 노주희 <a href="https://github.com/JuheeNoh1237"> <img style="width: 16px; height: 16px; margin-right: 20px;" alt="깃허브" src="https://cdn-icons-png.flaticon.com/512/25/25231.png"></a> | 오유진 <a href="https://github.com/5u0612"> <img style="width: 16px; height: 16px; margin-right: 20px;" alt="깃허브" src="https://cdn-icons-png.flaticon.com/512/25/25231.png"></a> |
+| 김남빈 <a href="https://github.com/kimnambin"> <img style="width: 16px; height: 16px; margin-right: 20px;" alt="깃허브" src="https://cdn-icons-png.flaticon.com/512/25/25231.png"></a> | 김범준 <a href="https://github.com/beom-jun"> <img style="width: 16px; height: 16px; margin-right: 20px;" alt="깃허브" src="https://cdn-icons-png.flaticon.com/512/25/25231.png"></a> | 오한솔 <a href="https://github.com/ohansoln"> <img style="width: 16px; height: 16px; margin-right: 20px;" alt="깃허브" src="https://cdn-icons-png.flaticon.com/512/25/25231.png"></a> | 노주희 <a href="https://github.com/JuheeNoh1237"> <img style="width: 16px; height: 16px; margin-right: 20px;" alt="깃허브" src="https://cdn-icons-png.flaticon.com/512/25/25231.png"></a> | 오유진 <a href="https://github.com/5u0612"> <img style="width: 16px; height: 16px; margin-right: 20px;" alt="깃허브" src="https://cdn-icons-png.flaticon.com/512/25/25231.png"></a> |
 | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 |                               <img style="width: 64px; height: 64px;" src="https://github.com/user-attachments/assets/b3e6f96e-8083-4ddf-a718-519c65468a97">                               |                            <img style="width: 64px; height: 64px;" src="https://github.com/user-attachments/assets/c3169e1c-ae98-4cd3-9502-8ca312368648">                             |                            <img style="width: 64px; height: 64px;" src="https://github.com/user-attachments/assets/c5f7c430-bd4f-46e2-93a8-9113c1c5d0fe">                             |                              <img style="width: 64px; height: 64px;" src="https://github.com/user-attachments/assets/188ed091-b883-4a19-93e6-0521ff48d567">                               |                           <img style="width: 64px; height: 64px;" src="https://github.com/user-attachments/assets/06175ad7-1bd9-4e70-b4a0-3fd2cda871fe">                            |
 |                                                                                         FRONT-END                                                                                          |                                                                                       FRONT-END                                                                                       |                                                                                     UX/UI 디자인                                                                                      |                                                                                         BACK-END                                                                                          |                                                                                      BACK-END                                                                                       |
@@ -77,33 +77,6 @@
 
 ---
 
-### 🤚나의 역할
-
-- **프론트 엔드 총괄**
-
-  - 프론트 부분 프로젝트 계획 및 일정 관리
-  - Context API를 사용하여 공통 컴포넌트 구현
-  - 코드 통합
-
-- **화면 및 기능 구현**
-
-  - 로그인 / 회원가입 페이지 구현
-  - 실시간 댓글 구현
-  - 카카오 Open API를 사용하여 지도 구현
-
----
-
-### ⭕문제 해결 과정
-
-- **서버 통신 오류**
-
-  - 팀원과 지속적으로 소통하며 빠르게 오류를 확인하고 해결했습니다.
-  - 해결 과정과 내용을 기록해두어 유사한 오류 발생 시 빠르게 오류를 해결했습니다.
-
-- **팀원과 의견 충돌**
-
-  - 기능의 필요성에 대해 의견 충돌이 발생했으나
-    사용자 평가를 통해 의견을 조율하여 팀원들 간 감정이 상하거나 충돌 없이 문제를 해결할 수 있었습니다.
 
 ---
 
